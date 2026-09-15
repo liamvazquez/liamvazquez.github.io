@@ -27,3 +27,4 @@
 - [x] Add Liam’s handwritten rain PS to the bottom-right
 - [x] Refine denial rain into soft windshield droplets with text distortion
 - [x] Mellow the rain audio and restyle the PS as faint handwriting
+- [x] Strengthen droplet glass blur while retaining faint high-detail rainfall

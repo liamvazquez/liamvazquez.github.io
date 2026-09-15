@@ -344,8 +344,8 @@
 }
 
 @keyframes window-rain-haze {
-  0%, 100% { opacity: 0.09; transform: translateX(-1%); }
-  50% { opacity: 0.16; transform: translateX(1%); }
+  from { transform: translate3d(2%, -45%, 0); }
+  to { transform: translate3d(-4%, 45%, 0); }
 }
 
 @keyframes rain-note-write {
@@ -470,13 +470,19 @@
   z-index: 4;
   overflow: hidden;
   pointer-events: none;
+  isolation: isolate;
 }
 
 .lockout-rain-haze {
   position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(104deg, transparent 0 43px, color-mix(in oklab, var(--destructive-foreground) 9%, transparent) 44px, transparent 46px 91px);
-  animation: window-rain-haze 8s ease-in-out infinite;
+  inset: -55% -18%;
+  opacity: 0.11;
+  background-image:
+    repeating-linear-gradient(101deg, transparent 0 21px, color-mix(in oklab, var(--destructive-foreground) 20%, transparent) 22px, transparent 23px 47px),
+    repeating-linear-gradient(99deg, transparent 0 61px, color-mix(in oklab, var(--destructive-foreground) 12%, transparent) 62px 63px, transparent 64px 109px);
+  background-size: 71px 113px, 127px 181px;
+  filter: blur(0.35px);
+  animation: window-rain-haze 1.85s linear infinite;
 }
 
 .lockout-raindrop {
@@ -487,10 +493,16 @@
   height: calc(var(--drop-size) * 1.45);
   border: 1px solid color-mix(in oklab, var(--destructive-foreground) 30%, transparent);
   border-radius: 58% 42% 62% 38% / 42% 46% 54% 58%;
-  background: linear-gradient(145deg, color-mix(in oklab, var(--destructive-foreground) 20%, transparent), color-mix(in oklab, var(--background) 16%, transparent));
-  box-shadow: inset 2px 2px 4px color-mix(in oklab, var(--destructive-foreground) 22%, transparent), 0 2px 4px color-mix(in oklab, var(--background) 18%, transparent);
-  backdrop-filter: blur(3.5px) saturate(0.7);
+  background:
+    radial-gradient(circle at 31% 24%, color-mix(in oklab, var(--destructive-foreground) 46%, transparent) 0 7%, transparent 16%),
+    linear-gradient(145deg, color-mix(in oklab, var(--destructive-foreground) 13%, transparent), color-mix(in oklab, var(--background) 18%, transparent));
+  box-shadow:
+    inset 2px 2px 5px color-mix(in oklab, var(--destructive-foreground) 30%, transparent),
+    inset -2px -3px 5px color-mix(in oklab, var(--background) 24%, transparent),
+    0 3px 6px color-mix(in oklab, var(--background) 20%, transparent);
+  backdrop-filter: blur(8px) contrast(0.76) saturate(0.55);
   animation: windshield-drop var(--drop-speed) cubic-bezier(0.42, 0, 0.58, 1) var(--drop-delay) infinite;
+  will-change: transform;
 }
 
 .lockout-raindrop::after {
@@ -501,8 +513,8 @@
   width: 28%;
   height: clamp(26px, 7vh, 74px);
   border-radius: 999px;
-  background: linear-gradient(to bottom, color-mix(in oklab, var(--destructive-foreground) 18%, transparent), transparent);
-  filter: blur(1px);
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--destructive-foreground) 24%, transparent), transparent);
+  filter: blur(1.4px);
 }
 
 .lockout-raindrop-1 { --drop-left: 5%; --drop-size: 18px; --drop-speed: 7.2s; --drop-delay: -2.1s; }
