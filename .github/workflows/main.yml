@@ -28,6 +28,9 @@ jobs:
         run: npm install
 
       - name: Build
+        env:
+          VITE_SUPABASE_URL: https://ijenxgopxqwirzstlwyg.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_WHEVK1Bh7vttZD_pvoFT9g_Rdwumad7
         run: npm run build
 
       - name: Setup Pages

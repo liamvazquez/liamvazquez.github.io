@@ -63,7 +63,7 @@ export function BlogFeed() {
 
     setLikeTotals((current) => ({ ...current, [id]: Math.max((current[id] ?? 0) + delta, 0) }));
 
-    adjustPostLike({ data: { postId: id, delta } })
+    adjustPostLike({ postId: id, delta })
       .then((total) => setLikeTotals((current) => ({ ...current, [id]: total })))
       .catch(() => {
         setLikeTotals((current) => ({ ...current, [id]: Math.max((current[id] ?? 0) - delta, 0) }));
