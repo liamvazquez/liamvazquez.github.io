@@ -1,4 +1,4 @@
-import postOne from "@/assets/liam-post-1.png.asset.json";
+import postOne from "@/assets/liam-post-1.png";
 
 export type DiaryPost = {
   id: string;
@@ -23,7 +23,7 @@ export const diaryPosts: DiaryPost[] = [
     author: "Liam Vazquez",
     handle: "@vazquez",
     date: "September 15, 2026",
-    image: postOne.url,
+    image: postOne,
     imageAlt: "Liam sitting outside at dusk, reading in his school uniform",
     caption:
       "First day at Midori High.\n\nThe basketball court looks good, I might sign up to a club.",

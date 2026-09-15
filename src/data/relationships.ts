@@ -1,4 +1,4 @@
-import liamAvatar from "@/assets/liam-avatar.png.asset.json";
+import liamAvatar from "@/assets/liam-avatar.png";
 
 export type RelationType =
   | "hate"
@@ -54,7 +54,7 @@ export const characters: Character[] = [
     id: "liam",
     name: "Liam Vazquez",
     role: "That's me",
-    image: liamAvatar.url,
+    image: liamAvatar,
     x: 0,
     y: 0,
     note: "That's me, what the actual fuck do you want me to tell you? It's just myself.",

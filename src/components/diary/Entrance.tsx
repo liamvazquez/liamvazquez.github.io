@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import liamAvatar from "@/assets/liam-avatar.png.asset.json";
+import liamAvatar from "@/assets/liam-avatar.png";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { diaryAudio } from "@/lib/diaryAudio";
@@ -104,7 +104,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
       )}
     >
       <img
-        src={liamAvatar.url}
+        src={liamAvatar}
         alt="Liam Vazquez standing in his school uniform"
         className="absolute inset-y-0 right-[-12%] h-full w-[82%] scale-105 object-contain object-right opacity-50 brightness-[0.62] contrast-[1.12] saturate-[0.72] md:right-[2%] md:w-[62%]"
       />
