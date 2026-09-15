@@ -54,6 +54,7 @@ class DiaryAudio {
   private musicVolume = 0.62;
   private musicMuted = false;
   private horrorPlaying = false;
+  private horrorMode = false;
   private horrorSources: AudioScheduledSourceNode[] = [];
   private visibilityBound = false;
 
@@ -302,6 +303,7 @@ class DiaryAudio {
     if (!this.init() || !this.context || !this.music || !this.horror) return;
     const now = this.context.currentTime;
     const target = this.musicMuted ? 0 : this.musicVolume;
+    this.horrorMode = enabled;
 
     if (enabled && !this.horrorPlaying) this.startHorrorTexture();
 
@@ -406,8 +408,8 @@ class DiaryAudio {
     this.musicVolume = next;
     this.musicMuted = next === 0;
     if (this.music && this.context) {
-      this.music.gain.setTargetAtTime(this.horrorPlaying && this.horror?.gain.value > 0.001 ? 0 : next * 0.16, this.context.currentTime, 0.045);
-      if (this.horror) this.horror.gain.setTargetAtTime(this.horrorPlaying && this.horror.gain.value > 0.001 ? next * 0.115 : 0, this.context.currentTime, 0.045);
+      this.music.gain.setTargetAtTime(this.horrorMode ? 0 : next * 0.16, this.context.currentTime, 0.045);
+      if (this.horror) this.horror.gain.setTargetAtTime(this.horrorMode ? next * 0.115 : 0, this.context.currentTime, 0.045);
     }
     try {
       window.localStorage.setItem("liam-diary-jazz-volume", String(next));
@@ -423,7 +425,7 @@ class DiaryAudio {
     if (!nextMuted && this.musicVolume === 0) this.musicVolume = 0.62;
     if (this.music && this.context) {
       this.music.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.16, this.context.currentTime, 0.045);
-      if (this.horror && this.horrorPlaying && this.horror.gain.value > 0.001) {
+      if (this.horror && this.horrorMode) {
         this.music.gain.setTargetAtTime(0, this.context.currentTime, 0.045);
         this.horror.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.115, this.context.currentTime, 0.045);
       }
