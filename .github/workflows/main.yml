@@ -30,6 +30,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Check build output
+        run: |
+          echo "=== ROOT ==="
+          ls -la
+          echo "=== OUTPUT ==="
+          find . -maxdepth 3 -type d \( -name "dist" -o -name ".output" \) -print
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
