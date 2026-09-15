@@ -185,7 +185,7 @@ export function RelationshipGraph() {
 
           {selected ? (
             <div
-              className="relationship-card animate-soft-rise absolute w-[18rem] border border-border bg-card/95 p-5 backdrop-blur-sm"
+              className="relationship-card animate-soft-rise absolute z-20 w-[18rem] border border-border bg-card/95 p-5 backdrop-blur-sm"
               style={{
                 "--relationship-card-x": `${selected.x + NODE * 0.8}px`,
                 "--relationship-card-y": `${selected.y - 20}px`,
@@ -222,7 +222,10 @@ export function RelationshipGraph() {
       </div>
 
       {/* Legend */}
-      <div className="absolute bottom-5 left-5 w-[calc(100%-6.5rem)] max-w-[44rem] border border-border bg-background/80 px-4 py-4 backdrop-blur-sm md:px-5">
+      <div className={cn(
+        "absolute bottom-5 left-5 w-[calc(100%-6.5rem)] max-w-[44rem] border border-border bg-background/80 px-4 py-4 backdrop-blur-sm md:px-5",
+        selected && "max-md:hidden",
+      )}>
         <p className="text-[0.6rem] tracking-editorial text-ash uppercase">Legend</p>
         <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 md:grid-cols-3 md:gap-x-7">
           {Object.entries(relationMeta).map(([key, meta]) => (
