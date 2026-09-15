@@ -33,3 +33,6 @@
 - [x] Refine windshield droplets and energize the feed’s school-diary backdrop
 - [x] Change the feed welcome line to “WELCOME, I GUESS”
 - [x] Remove the stray headline refraction artifact and smooth the floating denial X
+- [x] Add a twitching Backstory tab and text-only analog-horror state
+- [x] Crossfade jazz into synthesized horror ambience and restore it on exit
+- [x] Verify Backstory transitions on desktop and mobile
