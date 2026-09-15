@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { diaryAudio } from "@/lib/diaryAudio";
 import { Slider } from "@/components/ui/slider";
 import { incrementDiaryVisit } from "@/lib/visits.functions";
+import waterfallAsset from "@/assets/waterfall.png.asset.json";
 
 const TITLE = "Liam Vazquez — Private Diary";
 const DESCRIPTION =
@@ -85,6 +86,13 @@ function Index() {
         </div>
       )}
       <div className="diary-ambient" aria-hidden="true">
+        <div className="waterfall-scene">
+          <img className="waterfall-photo" src={waterfallAsset.url} alt="" />
+          <span className="waterfall-flow waterfall-flow-one" />
+          <span className="waterfall-flow waterfall-flow-two" />
+          <span className="waterfall-mist waterfall-mist-one" />
+          <span className="waterfall-mist waterfall-mist-two" />
+        </div>
         <span className="diary-window-light" />
         <span className="diary-paper-shadow diary-paper-shadow-one" />
         <span className="diary-paper-shadow diary-paper-shadow-two" />
