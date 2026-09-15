@@ -62,9 +62,9 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
             fill="none"
             aria-hidden="true"
           >
-            <path className="lockout-signature-stroke lockout-signature-main" d="M89 8C80 27 72 49 72 57C72 65 79 62 88 51C96 41 99 35 97 31C95 27 91 34 91 42C91 52 98 57 106 50C115 42 120 25 116 23C111 20 104 31 104 40C104 52 114 57 124 48C135 38 145 30 159 27C173 24 181 29 176 39C170 51 151 59 126 62" />
-            <path className="lockout-signature-stroke lockout-signature-sweep" d="M8 61C46 59 82 64 119 65C158 66 196 65 230 64" />
-            <path className="lockout-signature-stroke lockout-signature-flick" d="M235 64L239 64" />
+            <path pathLength="1" className="lockout-signature-stroke lockout-signature-main" d="M89 8C80 27 72 49 72 57C72 65 79 62 88 51C96 41 99 35 97 31C95 27 91 34 91 42C91 52 98 57 106 50C115 42 120 25 116 23C111 20 104 31 104 40C104 52 114 57 124 48C135 38 145 30 159 27C173 24 181 29 176 39C170 51 151 59 126 62" />
+            <path pathLength="1" className="lockout-signature-stroke lockout-signature-sweep" d="M8 61C46 59 82 64 119 65C158 66 196 65 230 64" />
+            <path pathLength="1" className="lockout-signature-stroke lockout-signature-flick" d="M235 64L239 64" />
           </svg>
           <p className="lockout-sincerely font-[family-name:var(--font-display)] text-xl italic md:text-2xl">
             Sincerely, Vaz.
