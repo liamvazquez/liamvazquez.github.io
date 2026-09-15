@@ -190,7 +190,7 @@ export function RelationshipGraph() {
         <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2">
           {Object.entries(relationMeta).map(([key, meta]) => (
             <li key={key} className="flex items-center gap-2">
-              <span className="h-px w-5" style={{ backgroundColor: meta.color }} />
+              <span className="h-[2px] w-5 rounded-full" style={{ backgroundColor: meta.color }} />
               <span className="text-[0.68rem] text-cream/80">{meta.label}</span>
             </li>
           ))}
