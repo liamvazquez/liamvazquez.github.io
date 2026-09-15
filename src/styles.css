@@ -1435,7 +1435,10 @@
   .blog-rain span,
   .diary-window-light,
   .diary-paper-shadow,
-  .diary-dust {
+  .diary-dust,
+  .waterfall-photo,
+  .waterfall-flow,
+  .waterfall-mist {
     animation: none;
   }
 
