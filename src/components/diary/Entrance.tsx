@@ -5,6 +5,67 @@ import { Button } from "@/components/ui/button";
 
 type Stage = "first" | "second" | "leaving" | "glitch" | "rejected";
 
+function playDenialSound() {
+  try {
+    const context = new AudioContext();
+    const master = context.createGain();
+    const compressor = context.createDynamicsCompressor();
+    const now = context.currentTime;
+
+    master.gain.setValueAtTime(0.0001, now);
+    master.gain.exponentialRampToValueAtTime(0.42, now + 0.012);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.82);
+    master.connect(compressor);
+    compressor.connect(context.destination);
+
+    const impact = context.createOscillator();
+    const impactGain = context.createGain();
+    impact.type = "sawtooth";
+    impact.frequency.setValueAtTime(118, now);
+    impact.frequency.exponentialRampToValueAtTime(38, now + 0.3);
+    impactGain.gain.setValueAtTime(0.6, now);
+    impactGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+    impact.connect(impactGain).connect(master);
+    impact.start(now);
+    impact.stop(now + 0.4);
+
+    [92, 111].forEach((frequency, index) => {
+      const buzzer = context.createOscillator();
+      const buzzerGain = context.createGain();
+      buzzer.type = index === 0 ? "square" : "sawtooth";
+      buzzer.frequency.setValueAtTime(frequency, now + 0.05);
+      buzzer.frequency.linearRampToValueAtTime(frequency * 1.9, now + 0.7);
+      buzzerGain.gain.setValueAtTime(0.0001, now);
+      buzzerGain.gain.exponentialRampToValueAtTime(0.16, now + 0.06);
+      buzzerGain.gain.setValueAtTime(0.13, now + 0.5);
+      buzzerGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+      buzzer.connect(buzzerGain).connect(master);
+      buzzer.start(now);
+      buzzer.stop(now + 0.82);
+    });
+
+    const noiseBuffer = context.createBuffer(1, Math.floor(context.sampleRate * 0.5), context.sampleRate);
+    const channel = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < channel.length; i += 1) channel[i] = Math.random() * 2 - 1;
+    const noise = context.createBufferSource();
+    const noiseFilter = context.createBiquadFilter();
+    const noiseGain = context.createGain();
+    noise.buffer = noiseBuffer;
+    noiseFilter.type = "bandpass";
+    noiseFilter.frequency.setValueAtTime(1800, now);
+    noiseFilter.Q.setValueAtTime(0.7, now);
+    noiseGain.gain.setValueAtTime(0.24, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.48);
+    noise.connect(noiseFilter).connect(noiseGain).connect(master);
+    noise.start(now);
+    noise.stop(now + 0.5);
+
+    window.setTimeout(() => void context.close(), 1100);
+  } catch {
+    // The visual rejection remains fully functional if browser audio is unavailable.
+  }
+}
+
 function GateButton({
   children,
   onClick,
@@ -124,6 +185,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
                 setStage("first");
                 return;
               }
+              playDenialSound();
               setStage("glitch");
               window.setTimeout(() => setStage("rejected"), 600);
             }}

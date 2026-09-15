@@ -74,6 +74,15 @@
   --cream: oklch(0.93 0.025 85);
   --ash: oklch(0.62 0.012 80);
   --ink: oklch(0.14 0 0);
+  --relation-hate: oklch(0.5 0.21 27);
+  --relation-love: oklch(0.78 0.13 353);
+  --relation-crush: oklch(0.68 0.2 20);
+  --relation-friend: oklch(0.65 0.14 245);
+  --relation-respect: oklch(0.72 0.13 192);
+  --relation-rival: oklch(0.72 0.16 65);
+  --relation-complicated: oklch(0.58 0.16 305);
+  --relation-family: oklch(0.64 0.15 150);
+  --relation-acquaintance: oklch(0.6 0.02 255);
   --background: oklch(0.09 0 0);
   --foreground: oklch(0.93 0.025 85);
   --card: oklch(0.12 0.003 60);
@@ -217,6 +226,15 @@
   95% { transform: scale(0.96) rotate(-2deg); }
 }
 
+@keyframes liam-aura {
+  0%, 100% { opacity: 0.26; transform: scale(0.96); }
+  50% { opacity: 0.62; transform: scale(1.08); }
+}
+
+@keyframes liam-orbit {
+  to { transform: rotate(360deg); }
+}
+
 @utility animate-glitch-out {
   animation: glitch-shift 0.62s steps(2, end) forwards;
 }
@@ -309,11 +327,82 @@
   animation: cross-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) both, cross-kick 0.72s steps(2, end) 0.7s infinite;
 }
 
+.liam-node-shell::before,
+.liam-node-shell::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border: 1px solid color-mix(in oklab, var(--cream) 25%, transparent);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.liam-node-shell::before {
+  box-shadow: 0 0 34px color-mix(in oklab, var(--cream) 24%, transparent), inset 0 0 28px color-mix(in oklab, var(--cream) 8%, transparent);
+  animation: liam-aura 3.2s ease-in-out infinite;
+}
+
+.liam-node-shell::after {
+  inset: -17px;
+  border-style: dashed;
+  opacity: 0.3;
+  animation: liam-orbit 24s linear infinite;
+}
+
+.liam-node-core {
+  background:
+    radial-gradient(circle at center, color-mix(in oklab, var(--cream) 8%, var(--secondary)) 0 48%, transparent 49%),
+    var(--secondary);
+  box-shadow: inset 0 0 30px color-mix(in oklab, var(--cream) 7%, transparent);
+}
+
+.liam-node-core > span {
+  position: relative;
+  z-index: 2;
+  max-width: 5rem;
+}
+
+.liam-orbit,
+.liam-basketball-seam,
+.liam-molecule,
+.liam-court-mark {
+  fill: none;
+  stroke: color-mix(in oklab, var(--cream) 30%, transparent);
+  stroke-width: 0.75;
+}
+
+.liam-orbit {
+  stroke-dasharray: 4 5;
+}
+
+.liam-orbit-secondary {
+  stroke: color-mix(in oklab, var(--relation-respect) 36%, transparent);
+}
+
+.liam-basketball-seam {
+  stroke: color-mix(in oklab, var(--relation-rival) 24%, transparent);
+}
+
+.liam-molecule,
+.liam-court-mark {
+  stroke: color-mix(in oklab, var(--relation-respect) 52%, transparent);
+}
+
+.liam-electron {
+  fill: var(--cream);
+  filter: drop-shadow(0 0 4px var(--cream));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lockout-scene,
   .lockout-scanlines,
   .lockout-copy,
   .lockout-cross {
+    animation: none;
+  }
+
+  .liam-node-shell::before,
+  .liam-node-shell::after {
     animation: none;
   }
 }
