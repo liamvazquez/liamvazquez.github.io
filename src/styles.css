@@ -1405,7 +1405,7 @@
   bottom: 0;
   width: 13rem;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
 }
 .feed-margin-left { left: 0; }
@@ -1418,7 +1418,7 @@
   top: 0;
   bottom: 0;
   width: 1px;
-  background: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--foreground) 34%, transparent), transparent);
+  background: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--cream) 62%, transparent), transparent);
 }
 .feed-margin-left .feed-rule { right: 2.6rem; }
 .feed-margin-right .feed-rule { left: 2.6rem; }
@@ -1430,10 +1430,10 @@
   gap: 6rem;
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: color-mix(in oklab, var(--foreground) 45%, transparent);
+  color: color-mix(in oklab, var(--cream) 70%, transparent);
   writing-mode: vertical-rl;
   animation: feed-ticker-scroll 46s linear infinite;
 }
@@ -1446,7 +1446,7 @@
 }
 .feed-doodle {
   position: absolute;
-  border: 1px solid color-mix(in oklab, var(--foreground) 36%, transparent);
+  border: 1px solid color-mix(in oklab, var(--cream) 55%, transparent);
   border-radius: 999px;
   animation: feed-doodle-float 14s ease-in-out infinite;
 }
@@ -1465,7 +1465,7 @@
   width: 4rem;
   background: repeating-linear-gradient(
     -38deg,
-    color-mix(in oklab, var(--foreground) 34%, transparent) 0 1px,
+    color-mix(in oklab, var(--cream) 62%, transparent) 0 1px,
     transparent 1px 9px
   );
   animation: feed-doodle-float 19s ease-in-out infinite reverse;
@@ -1475,7 +1475,7 @@
   top: 8%;
   height: 3.4rem;
   width: 1.1rem;
-  border: 1px solid color-mix(in oklab, var(--foreground) 38%, transparent);
+  border: 1px solid color-mix(in oklab, var(--cream) 55%, transparent);
   border-radius: 999px 999px 4px 4px;
   animation: feed-clip-sway 9s ease-in-out infinite;
 }
