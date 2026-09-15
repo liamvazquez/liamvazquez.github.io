@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { diaryAudio } from "@/lib/diaryAudio";
 import { Slider } from "@/components/ui/slider";
+import { incrementDiaryVisit } from "@/lib/visits.functions";
 
 const TITLE = "Liam Vazquez — Private Diary";
 const DESCRIPTION =
@@ -29,34 +30,57 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const STORAGE_KEY = "liam-diary-visits";
-
 type Section = "blog" | "relationships" | "backstory";
+type TransitionDirection = "into" | "out" | null;
 
 function Index() {
   const [entered, setEntered] = useState(false);
   const [visits, setVisits] = useState(0);
   const [section, setSection] = useState<Section>("blog");
+  const [transitionDirection, setTransitionDirection] = useState<TransitionDirection>(null);
   const [musicVolume, setMusicVolume] = useState(() => diaryAudio.getMusicVolume());
   const [musicMuted, setMusicMuted] = useState(musicVolume === 0);
 
-  const handleEnter = () => {
-    let next = 1;
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      next = (raw ? parseInt(raw, 10) || 0 : 0) + 1;
-      window.localStorage.setItem(STORAGE_KEY, String(next));
-    } catch {
-      next = 1;
-    }
-    setVisits(next);
+  const handleEnter = async () => {
     setEntered(true);
+    try {
+      const total = await incrementDiaryVisit();
+      setVisits(total);
+    } catch {
+      setVisits(0);
+    }
+  };
+
+  const changeSection = (next: Section) => {
+    if (next === section || transitionDirection) return;
+    diaryAudio.play("section");
+    const touchesBackstory = next === "backstory" || section === "backstory";
+    if (!touchesBackstory) {
+      setSection(next);
+      return;
+    }
+
+    const direction: TransitionDirection = next === "backstory" ? "into" : "out";
+    setTransitionDirection(direction);
+    diaryAudio.setHorrorMode(next === "backstory");
+    window.setTimeout(() => setSection(next), direction === "into" ? 560 : 440);
+    window.setTimeout(() => {
+      setTransitionDirection(null);
+    }, 1450);
   };
 
   if (!entered) return <Entrance onEnter={handleEnter} />;
 
   return (
     <main className={cn("diary-shell animate-veil-in grain relative min-h-dvh overflow-hidden bg-background", section === "backstory" && "backstory-active")}>
+      {transitionDirection && (
+        <div className={cn("backstory-transition fixed inset-0 z-40", `backstory-transition-${transitionDirection}`)} aria-hidden="true">
+          <span className="backstory-transition-iris" />
+          <span className="backstory-transition-slit backstory-transition-slit-one" />
+          <span className="backstory-transition-slit backstory-transition-slit-two" />
+          <span className="backstory-transition-flash" />
+        </div>
+      )}
       <div className="diary-ambient" aria-hidden="true">
         <span className="diary-window-light" />
         <span className="diary-paper-shadow diary-paper-shadow-one" />
@@ -74,11 +98,8 @@ function Index() {
               type="button"
               variant="ghost"
               key={key}
-              onClick={() => {
-                diaryAudio.play("section");
-                diaryAudio.setHorrorMode(key === "backstory");
-                setSection(key);
-              }}
+              onClick={() => changeSection(key)}
+              disabled={transitionDirection !== null}
               className={cn(
                 "h-auto rounded-none px-0 py-0 text-[0.66rem] font-normal tracking-editorial uppercase shadow-none hover:bg-transparent",
                 key === "backstory" && "backstory-tab",
