@@ -11,32 +11,24 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: 20
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: npm install
 
       - name: Build
-        run: bun run build
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -46,6 +38,5 @@ jobs:
         with:
           path: ./dist
 
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: Deploy
         uses: actions/deploy-pages@v4
