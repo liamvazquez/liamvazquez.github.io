@@ -81,7 +81,7 @@ class DiaryAudio {
       const compressor = this.context.createDynamicsCompressor();
       this.master.gain.value = 0.72;
       this.effects.gain.value = 0.7;
-      this.music.gain.value = this.musicMuted ? 0 : this.musicVolume * 0.16;
+      this.music.gain.value = this.musicMuted ? 0 : this.musicVolume * MUSIC_GAIN;
       this.horror.gain.value = 0;
       this.effects.connect(this.master);
       this.music.connect(this.master);
@@ -311,8 +311,8 @@ class DiaryAudio {
     this.horror.gain.cancelScheduledValues(now);
     this.music.gain.setValueAtTime(this.music.gain.value, now);
     this.horror.gain.setValueAtTime(this.horror.gain.value, now);
-    this.music.gain.linearRampToValueAtTime(enabled ? 0 : target * 0.16, now + 2);
-    this.horror.gain.linearRampToValueAtTime(enabled ? target * 0.115 : 0, now + 2);
+    this.music.gain.linearRampToValueAtTime(enabled ? 0 : target * MUSIC_GAIN, now + 2);
+    this.horror.gain.linearRampToValueAtTime(enabled ? target * HORROR_GAIN : 0, now + 2);
   }
 
   private startHorrorTexture() {
@@ -408,8 +408,8 @@ class DiaryAudio {
     this.musicVolume = next;
     this.musicMuted = next === 0;
     if (this.music && this.context) {
-      this.music.gain.setTargetAtTime(this.horrorMode ? 0 : next * 0.16, this.context.currentTime, 0.045);
-      if (this.horror) this.horror.gain.setTargetAtTime(this.horrorMode ? next * 0.115 : 0, this.context.currentTime, 0.045);
+      this.music.gain.setTargetAtTime(this.horrorMode ? 0 : next * MUSIC_GAIN, this.context.currentTime, 0.045);
+      if (this.horror) this.horror.gain.setTargetAtTime(this.horrorMode ? next * HORROR_GAIN : 0, this.context.currentTime, 0.045);
     }
     try {
       window.localStorage.setItem("liam-diary-jazz-volume", String(next));
@@ -424,10 +424,10 @@ class DiaryAudio {
     this.musicMuted = nextMuted;
     if (!nextMuted && this.musicVolume === 0) this.musicVolume = 0.62;
     if (this.music && this.context) {
-      this.music.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.16, this.context.currentTime, 0.045);
+      this.music.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * MUSIC_GAIN, this.context.currentTime, 0.045);
       if (this.horror && this.horrorMode) {
         this.music.gain.setTargetAtTime(0, this.context.currentTime, 0.045);
-        this.horror.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.115, this.context.currentTime, 0.045);
+        this.horror.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * HORROR_GAIN, this.context.currentTime, 0.045);
       }
     }
     if (!nextMuted) this.play("mute");
