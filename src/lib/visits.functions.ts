@@ -1,9 +1,8 @@
-import { createServerFn } from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
 
-export const incrementDiaryVisit = createServerFn({ method: "POST" }).handler(async () => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin.rpc("increment_diary_visit");
+export async function incrementDiaryVisit() {
+  const { data, error } = await supabase.rpc("increment_diary_visit");
 
   if (error) throw new Error("Could not update the diary visitor count");
   return Number(data ?? 0);
-});
+}

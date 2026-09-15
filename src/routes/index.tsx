@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Volume1, Volume2, VolumeX } from "lucide-react";
 import { Entrance } from "@/components/diary/Entrance";
 import { VisitorCounter } from "@/components/diary/VisitorCounter";
@@ -40,15 +40,18 @@ function Index() {
   const [transitionDirection, setTransitionDirection] = useState<TransitionDirection>(null);
   const [musicVolume, setMusicVolume] = useState(() => diaryAudio.getMusicVolume());
   const [musicMuted, setMusicMuted] = useState(musicVolume === 0);
+  const visitCounted = useRef(false);
 
-  const handleEnter = async () => {
+  useEffect(() => {
+    if (visitCounted.current) return;
+    visitCounted.current = true;
+    incrementDiaryVisit()
+      .then(setVisits)
+      .catch(() => setVisits(0));
+  }, []);
+
+  const handleEnter = () => {
     setEntered(true);
-    try {
-      const total = await incrementDiaryVisit();
-      setVisits(total);
-    } catch {
-      setVisits(0);
-    }
   };
 
   const changeSection = (next: Section) => {

@@ -39,3 +39,4 @@
 - [x] Intensify Backstory text corruption and environmental details
 - [x] Add full-screen transitions entering and leaving Backstory
 - [x] Replace the per-browser visitor count with one shared global total
+- [x] Make shared visits and likes work from the static GitHub Pages deployment
