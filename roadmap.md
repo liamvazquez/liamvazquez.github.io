@@ -30,3 +30,5 @@
 - [x] Strengthen droplet glass blur while retaining faint high-detail rainfall
 - [x] Add stronger independent screen impact and lens-like foreground water distortion
 - [x] Add moving optical refraction directly through the denial headline
+- [x] Refine windshield droplets and energize the feed’s school-diary backdrop
+- [x] Change the feed welcome line to “WELCOME, I GUESS”

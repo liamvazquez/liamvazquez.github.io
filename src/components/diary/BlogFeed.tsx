@@ -68,13 +68,15 @@ export function BlogFeed() {
     <div className="blog-atmosphere relative mx-auto w-full max-w-[34rem] px-5 pb-32">
       <div className="blog-rain" aria-hidden="true">
         <span>09 / 15 / 26</span><span>PRIVATE</span><span>MIDORI</span><span>LV—001</span>
+        <i className="blog-light blog-light-one" /><i className="blog-light blog-light-two" />
+        <i className="blog-paper blog-paper-one" /><i className="blog-paper blog-paper-two" />
       </div>
       <header className="animate-soft-rise border-b border-border pt-4 pb-10">
         <h2 className="font-[family-name:var(--font-display)] text-5xl font-light text-cream italic">
           The Feed
         </h2>
         <p className="mt-3 text-xs tracking-[0.2em] text-ash uppercase">
-          Entries he never meant to publish
+          Welcome, I guess
         </p>
         <div className="mt-8 flex items-center gap-7" role="tablist" aria-label="Filter posts">
           {(["all", "favorites"] as const).map((key) => (
