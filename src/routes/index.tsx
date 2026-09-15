@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Volume1, Volume2, VolumeX } from "lucide-react";
 import { Entrance } from "@/components/diary/Entrance";
 import { VisitorCounter } from "@/components/diary/VisitorCounter";
@@ -40,7 +40,6 @@ function Index() {
   const [transitionDirection, setTransitionDirection] = useState<TransitionDirection>(null);
   const [musicVolume, setMusicVolume] = useState(() => diaryAudio.getMusicVolume());
   const [musicMuted, setMusicMuted] = useState(musicVolume === 0);
-  const transitionTimer = useRef<number | null>(null);
 
   const handleEnter = async () => {
     setEntered(true);
@@ -65,9 +64,8 @@ function Index() {
     setTransitionDirection(direction);
     diaryAudio.setHorrorMode(next === "backstory");
     window.setTimeout(() => setSection(next), direction === "into" ? 560 : 440);
-    transitionTimer.current = window.setTimeout(() => {
+    window.setTimeout(() => {
       setTransitionDirection(null);
-      transitionTimer.current = null;
     }, 1450);
   };
 
