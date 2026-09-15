@@ -285,12 +285,21 @@
 }
 
 @keyframes denial-shake {
-  0%, 100% { transform: translate(0) rotate(0); }
-  8% { transform: translate(-13px, 7px) rotate(-0.35deg); }
-  17% { transform: translate(11px, -6px) rotate(0.28deg); }
-  28% { transform: translate(-7px, 4px) rotate(-0.18deg); }
-  42% { transform: translate(5px, -3px) rotate(0.12deg); }
-  62% { transform: translate(-2px, 1px); }
+  0% { transform: translate3d(0, 0, 0) rotate(0) scale(1.05); }
+  5% { transform: translate3d(-30px, 16px, 0) rotate(-0.9deg) scale(1.07); }
+  11% { transform: translate3d(26px, -14px, 0) rotate(0.72deg) scale(1.065); }
+  18% { transform: translate3d(-21px, -9px, 0) rotate(-0.54deg) scale(1.06); }
+  27% { transform: translate3d(17px, 11px, 0) rotate(0.42deg) scale(1.055); }
+  38% { transform: translate3d(-12px, 6px, 0) rotate(-0.28deg) scale(1.05); }
+  52% { transform: translate3d(8px, -5px, 0) rotate(0.18deg) scale(1.05); }
+  68% { transform: translate3d(-4px, 3px, 0) rotate(-0.08deg) scale(1.05); }
+  100% { transform: translate3d(0, 0, 0) rotate(0) scale(1.05); }
+}
+
+@keyframes impact-ring {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(0.12); border-width: 12px; }
+  75% { opacity: 0.2; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(3.4); border-width: 1px; }
 }
 
 @keyframes signature-write {
@@ -336,11 +345,14 @@
 }
 
 @keyframes windshield-drop {
-  0% { opacity: 0; transform: translate3d(0, -10vh, 0) scale(0.7); }
-  8% { opacity: 0.72; }
-  24% { transform: translate3d(-2px, 8vh, 0) scale(1); }
-  66% { opacity: 0.58; transform: translate3d(3px, 52vh, 0) scaleX(0.84) scaleY(1.35); }
-  100% { opacity: 0; transform: translate3d(-1px, 112vh, 0) scaleX(0.7) scaleY(1.8); }
+  0% { opacity: 0; transform: translate3d(0, -12vh, 0) scale(0.58); }
+  5% { opacity: 0.88; }
+  17% { transform: translate3d(-3px, 3vh, 0) scale(1); }
+  29% { transform: translate3d(2px, 12vh, 0) scaleX(0.96) scaleY(1.08); }
+  31% { transform: translate3d(2px, 12vh, 0) scaleX(1.08) scaleY(0.94); }
+  57% { opacity: 0.82; transform: translate3d(-4px, 47vh, 0) scaleX(0.82) scaleY(1.42); }
+  79% { transform: translate3d(3px, 78vh, 0) scaleX(0.7) scaleY(1.75); }
+  100% { opacity: 0; transform: translate3d(-2px, 116vh, 0) scaleX(0.56) scaleY(2.15); }
 }
 
 @keyframes window-rain-haze {
@@ -436,8 +448,26 @@
 }
 
 .lockout-scene {
-  animation: lockout-pulse 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) both, denial-shake 0.58s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  animation: lockout-pulse 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) both;
   transform-origin: center;
+}
+
+.lockout-impact {
+  animation: denial-shake 0.92s cubic-bezier(0.22, 0.75, 0.25, 1) both;
+  transform-origin: center;
+}
+
+.lockout-impact-ring {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: min(40vw, 25rem);
+  aspect-ratio: 1;
+  border: 8px solid color-mix(in oklab, var(--destructive-foreground) 72%, transparent);
+  border-radius: 9999px;
+  animation: impact-ring 0.72s cubic-bezier(0.15, 0.75, 0.2, 1) both;
+  pointer-events: none;
 }
 
 .lockout-paper {
@@ -467,7 +497,7 @@
 }
 
 .lockout-rain {
-  z-index: 4;
+  z-index: 20;
   overflow: hidden;
   pointer-events: none;
   isolation: isolate;
@@ -476,7 +506,7 @@
 .lockout-rain-haze {
   position: absolute;
   inset: -55% -18%;
-  opacity: 0.11;
+  opacity: 0.075;
   background-image:
     repeating-linear-gradient(101deg, transparent 0 21px, color-mix(in oklab, var(--destructive-foreground) 20%, transparent) 22px, transparent 23px 47px),
     repeating-linear-gradient(99deg, transparent 0 61px, color-mix(in oklab, var(--destructive-foreground) 12%, transparent) 62px 63px, transparent 64px 109px);
@@ -490,17 +520,18 @@
   top: -12vh;
   left: var(--drop-left);
   width: var(--drop-size);
-  height: calc(var(--drop-size) * 1.45);
-  border: 1px solid color-mix(in oklab, var(--destructive-foreground) 30%, transparent);
-  border-radius: 58% 42% 62% 38% / 42% 46% 54% 58%;
+  height: calc(var(--drop-size) * 1.32);
+  border: 1px solid color-mix(in oklab, var(--destructive-foreground) 42%, transparent);
+  border-radius: 48% 52% 58% 42% / 38% 44% 56% 62%;
   background:
-    radial-gradient(circle at 31% 24%, color-mix(in oklab, var(--destructive-foreground) 46%, transparent) 0 7%, transparent 16%),
-    linear-gradient(145deg, color-mix(in oklab, var(--destructive-foreground) 13%, transparent), color-mix(in oklab, var(--background) 18%, transparent));
+    radial-gradient(circle at 29% 21%, color-mix(in oklab, var(--destructive-foreground) 66%, transparent) 0 5%, transparent 15%),
+    radial-gradient(ellipse at 63% 72%, color-mix(in oklab, var(--background) 26%, transparent), transparent 58%),
+    linear-gradient(145deg, color-mix(in oklab, var(--destructive-foreground) 10%, transparent), color-mix(in oklab, var(--background) 22%, transparent));
   box-shadow:
     inset 2px 2px 5px color-mix(in oklab, var(--destructive-foreground) 30%, transparent),
     inset -2px -3px 5px color-mix(in oklab, var(--background) 24%, transparent),
     0 3px 6px color-mix(in oklab, var(--background) 20%, transparent);
-  backdrop-filter: blur(8px) contrast(0.76) saturate(0.55);
+  backdrop-filter: blur(15px) contrast(1.75) saturate(0.35) brightness(1.18);
   animation: windshield-drop var(--drop-speed) cubic-bezier(0.42, 0, 0.58, 1) var(--drop-delay) infinite;
   will-change: transform;
 }
@@ -508,13 +539,22 @@
 .lockout-raindrop::after {
   content: "";
   position: absolute;
-  top: 72%;
-  left: 35%;
-  width: 28%;
-  height: clamp(26px, 7vh, 74px);
+  top: 76%;
+  left: 38%;
+  width: 22%;
+  height: clamp(34px, 9vh, 92px);
   border-radius: 999px;
   background: linear-gradient(to bottom, color-mix(in oklab, var(--destructive-foreground) 24%, transparent), transparent);
-  filter: blur(1.4px);
+  filter: blur(2px);
+}
+
+.lockout-raindrop::before {
+  content: "";
+  position: absolute;
+  inset: 14% 18% 18% 12%;
+  border-radius: inherit;
+  border-right: 2px solid color-mix(in oklab, var(--destructive-foreground) 34%, transparent);
+  filter: blur(0.5px);
 }
 
 .lockout-raindrop-1 { --drop-left: 5%; --drop-size: 18px; --drop-speed: 7.2s; --drop-delay: -2.1s; }
@@ -535,6 +575,18 @@
 .lockout-raindrop-16 { --drop-left: 58%; --drop-size: 13px; --drop-speed: 8.8s; --drop-delay: -4.2s; }
 .lockout-raindrop-17 { --drop-left: 76%; --drop-size: 8px; --drop-speed: 6.1s; --drop-delay: -2.5s; }
 .lockout-raindrop-18 { --drop-left: 96%; --drop-size: 11px; --drop-speed: 7.9s; --drop-delay: -7.1s; }
+.lockout-raindrop-19 { --drop-left: 8%; --drop-size: 34px; --drop-speed: 10.8s; --drop-delay: -8.8s; }
+.lockout-raindrop-20 { --drop-left: 16%; --drop-size: 27px; --drop-speed: 8.9s; --drop-delay: -5.2s; }
+.lockout-raindrop-21 { --drop-left: 31%; --drop-size: 38px; --drop-speed: 12.1s; --drop-delay: -10.4s; }
+.lockout-raindrop-22 { --drop-left: 38%; --drop-size: 29px; --drop-speed: 9.7s; --drop-delay: -3.7s; }
+.lockout-raindrop-23 { --drop-left: 45%; --drop-size: 42px; --drop-speed: 12.8s; --drop-delay: -7.9s; }
+.lockout-raindrop-24 { --drop-left: 51%; --drop-size: 31px; --drop-speed: 9.3s; --drop-delay: -1.9s; }
+.lockout-raindrop-25 { --drop-left: 57%; --drop-size: 37px; --drop-speed: 11.6s; --drop-delay: -9.6s; }
+.lockout-raindrop-26 { --drop-left: 64%; --drop-size: 25px; --drop-speed: 8.6s; --drop-delay: -4.3s; }
+.lockout-raindrop-27 { --drop-left: 70%; --drop-size: 43px; --drop-speed: 13.2s; --drop-delay: -11.5s; }
+.lockout-raindrop-28 { --drop-left: 82%; --drop-size: 32px; --drop-speed: 10.1s; --drop-delay: -6.4s; }
+.lockout-raindrop-29 { --drop-left: 89%; --drop-size: 39px; --drop-speed: 12.4s; --drop-delay: -2.8s; }
+.lockout-raindrop-30 { --drop-left: 94%; --drop-size: 28px; --drop-speed: 9.5s; --drop-delay: -7.3s; }
 
 .lockout-margin {
   position: absolute;

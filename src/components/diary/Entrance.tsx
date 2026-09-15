@@ -44,51 +44,54 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
 
   if (stage === "rejected") {
     return (
-      <div className="lockout-scene grain fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-destructive px-6 select-none">
-        <div className="lockout-paper absolute inset-0" aria-hidden="true" />
-        <div className="lockout-shadow absolute inset-0" aria-hidden="true" />
-        <div className="lockout-window-shadow absolute inset-0" aria-hidden="true" />
+      <div className="lockout-scene fixed inset-0 z-50 overflow-hidden bg-destructive select-none">
+        <div className="lockout-impact grain absolute -inset-[5%] flex flex-col items-center justify-center overflow-hidden px-[calc(5%+1.5rem)]">
+          <div className="lockout-paper absolute inset-0" aria-hidden="true" />
+          <div className="lockout-shadow absolute inset-0" aria-hidden="true" />
+          <div className="lockout-window-shadow absolute inset-0" aria-hidden="true" />
+          <span className="lockout-impact-ring" aria-hidden="true" />
+          <span className="lockout-margin" aria-hidden="true" />
+          <span className="lockout-hole lockout-hole-one" aria-hidden="true" />
+          <span className="lockout-hole lockout-hole-two" aria-hidden="true" />
+          <span className="lockout-ink lockout-ink-one" aria-hidden="true" />
+          <span className="lockout-ink lockout-ink-two" aria-hidden="true" />
+          <span className="lockout-pencil lockout-pencil-one" aria-hidden="true" />
+          <span className="lockout-pencil lockout-pencil-two" aria-hidden="true" />
+          <div className="lockout-cross relative h-40 w-40 md:h-56 md:w-56" aria-hidden="true">
+            <span className="lockout-stroke lockout-stroke-one" />
+            <span className="lockout-stroke lockout-stroke-two" />
+          </div>
+          <p className="lockout-copy-shell mt-12 text-center font-[family-name:var(--font-display)] text-5xl font-semibold text-destructive-foreground italic md:text-7xl">
+            <span className="lockout-copy">Then fuck off then!</span>
+          </p>
+          <p className="lockout-subcopy mt-5 text-center font-[family-name:var(--font-display)] text-lg text-destructive-foreground/65 italic">
+            Reload it yourself if you’re that desperate.
+          </p>
+          <div className="lockout-signoff mt-11 flex flex-col items-center text-destructive-foreground" aria-label="Sincerely, Vaz.">
+            <svg
+              className="lockout-signature h-16 w-48 md:h-20 md:w-60"
+              viewBox="0 0 240 80"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path pathLength="1" className="lockout-signature-stroke lockout-signature-main" d="M89 8C80 27 72 49 72 57C72 65 79 62 88 51C96 41 99 35 97 31C95 27 91 34 91 42C91 52 98 57 106 50C115 42 120 25 116 23C111 20 104 31 104 40C104 52 114 57 124 48C135 38 145 30 159 27C173 24 181 29 176 39C170 51 151 59 126 62" />
+              <path pathLength="1" className="lockout-signature-stroke lockout-signature-sweep" d="M8 61C46 59 82 64 119 65C158 66 196 65 230 64" />
+              <path pathLength="1" className="lockout-signature-stroke lockout-signature-flick" d="M235 64L239 64" />
+            </svg>
+            <p className="lockout-sincerely font-[family-name:var(--font-display)] text-xl italic md:text-2xl">
+              Sincerely, Vaz.
+            </p>
+          </div>
+          <p className="lockout-rain-note absolute right-[7%] bottom-[7%] max-w-[15rem] text-right text-sm text-destructive-foreground italic md:max-w-sm md:text-lg">
+            PS : Enjoy the rain noise while you&apos;re fucked off 🤤
+          </p>
+        </div>
         <div className="lockout-rain absolute inset-0" aria-hidden="true">
           <span className="lockout-rain-haze" />
-          {Array.from({ length: 18 }, (_, index) => (
+          {Array.from({ length: 30 }, (_, index) => (
             <span key={index} className={`lockout-raindrop lockout-raindrop-${index + 1}`} />
           ))}
         </div>
-        <span className="lockout-margin" aria-hidden="true" />
-        <span className="lockout-hole lockout-hole-one" aria-hidden="true" />
-        <span className="lockout-hole lockout-hole-two" aria-hidden="true" />
-        <span className="lockout-ink lockout-ink-one" aria-hidden="true" />
-        <span className="lockout-ink lockout-ink-two" aria-hidden="true" />
-        <span className="lockout-pencil lockout-pencil-one" aria-hidden="true" />
-        <span className="lockout-pencil lockout-pencil-two" aria-hidden="true" />
-        <div className="lockout-cross relative h-40 w-40 md:h-56 md:w-56" aria-hidden="true">
-          <span className="lockout-stroke lockout-stroke-one" />
-          <span className="lockout-stroke lockout-stroke-two" />
-        </div>
-        <p className="lockout-copy-shell mt-12 text-center font-[family-name:var(--font-display)] text-5xl font-semibold text-destructive-foreground italic md:text-7xl">
-          <span className="lockout-copy">Then fuck off then!</span>
-        </p>
-        <p className="lockout-subcopy mt-5 text-center font-[family-name:var(--font-display)] text-lg text-destructive-foreground/65 italic">
-          Reload it yourself if you’re that desperate.
-        </p>
-        <div className="lockout-signoff mt-11 flex flex-col items-center text-destructive-foreground" aria-label="Sincerely, Vaz.">
-          <svg
-            className="lockout-signature h-16 w-48 md:h-20 md:w-60"
-            viewBox="0 0 240 80"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path pathLength="1" className="lockout-signature-stroke lockout-signature-main" d="M89 8C80 27 72 49 72 57C72 65 79 62 88 51C96 41 99 35 97 31C95 27 91 34 91 42C91 52 98 57 106 50C115 42 120 25 116 23C111 20 104 31 104 40C104 52 114 57 124 48C135 38 145 30 159 27C173 24 181 29 176 39C170 51 151 59 126 62" />
-            <path pathLength="1" className="lockout-signature-stroke lockout-signature-sweep" d="M8 61C46 59 82 64 119 65C158 66 196 65 230 64" />
-            <path pathLength="1" className="lockout-signature-stroke lockout-signature-flick" d="M235 64L239 64" />
-          </svg>
-          <p className="lockout-sincerely font-[family-name:var(--font-display)] text-xl italic md:text-2xl">
-            Sincerely, Vaz.
-          </p>
-        </div>
-        <p className="lockout-rain-note absolute right-5 bottom-5 max-w-[15rem] text-right text-sm text-destructive-foreground italic md:right-10 md:bottom-8 md:max-w-sm md:text-lg">
-          PS : Enjoy the rain noise while you&apos;re fucked off 🤤
-        </p>
       </div>
     );
   }
