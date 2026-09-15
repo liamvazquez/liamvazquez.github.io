@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Heart, MessageCircle, Bookmark, MapPin } from "lucide-react";
-import liamAvatar from "@/assets/liam-avatar.png.asset.json";
+import liamAvatar from "@/assets/liam-avatar.png";
 import { diaryPosts } from "@/data/posts";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -119,7 +119,7 @@ export function BlogFeed() {
           >
             <div className="flex items-center gap-3">
               <img
-                src={liamAvatar.url}
+                src={liamAvatar}
                 alt=""
                 className="h-10 w-10 rounded-full border border-border bg-secondary object-cover object-top"
               />
