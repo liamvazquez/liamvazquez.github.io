@@ -222,18 +222,19 @@
   100% { transform: rotate(var(--slash-angle)) scaleX(1); opacity: 0.62; }
 }
 
-@keyframes ambient-orbit {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+@keyframes classroom-light {
+  0%, 100% { transform: translateX(-8%) skewX(-9deg); opacity: 0.24; }
+  50% { transform: translateX(10%) skewX(-5deg); opacity: 0.38; }
 }
 
-@keyframes ambient-breathe {
-  0%, 100% { opacity: 0.22; transform: scaleY(0.82); }
-  50% { opacity: 0.48; transform: scaleY(1); }
+@keyframes paper-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--paper-angle)); }
+  50% { transform: translate3d(18px, -12px, 0) rotate(calc(var(--paper-angle) + 1deg)); }
 }
 
-@keyframes ambient-index {
-  0%, 100% { opacity: 0.08; transform: translateY(-10px); }
-  50% { opacity: 0.18; transform: translateY(16px); }
+@keyframes dust-float {
+  0%, 100% { transform: translate(0, 0); opacity: 0.08; }
+  50% { transform: translate(34px, -24px); opacity: 0.18; }
 }
 
 @keyframes blog-waterfall {
@@ -265,10 +266,22 @@
 }
 
 @keyframes lockout-pulse {
-  0%, 100% { background-color: oklch(0.34 0.18 25); filter: contrast(1); }
-  45% { background-color: oklch(0.44 0.24 27); filter: contrast(1.15); }
-  48% { background-color: oklch(0.2 0.12 25); filter: contrast(1.5); }
-  52% { background-color: oklch(0.48 0.26 28); filter: contrast(1.2); }
+  0% { background-color: oklch(0.72 0.25 27); transform: scale(1.2); filter: brightness(1.9); }
+  9% { background-color: oklch(0.38 0.18 25); transform: scale(0.985); filter: brightness(0.8); }
+  18% { transform: scale(1.015); filter: brightness(1.1); }
+  100% { background-color: oklch(0.42 0.19 25); transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes lockout-slam {
+  0% { opacity: 0; transform: scale(2.8) rotate(-9deg); filter: blur(18px); }
+  32% { opacity: 1; transform: scale(0.88) rotate(3deg); filter: blur(0); }
+  54% { transform: scale(1.08) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@keyframes marker-draw {
+  from { transform: translateY(-50%) rotate(var(--stroke-angle)) scaleX(0); }
+  to { transform: translateY(-50%) rotate(var(--stroke-angle)) scaleX(1); }
 }
 
 @keyframes scanline-roll {
@@ -354,70 +367,72 @@
 }
 
 .lockout-scene {
-  --glitch-cyan: oklch(0.81 0.15 195);
-  --glitch-red: oklch(0.68 0.25 25);
-  animation: lockout-pulse 3.8s ease-in-out infinite;
+  animation: lockout-pulse 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  transform-origin: center;
 }
 
-.lockout-scanlines {
+.lockout-paper {
   pointer-events: none;
-  z-index: 10;
-  opacity: 0.28;
-  background: repeating-linear-gradient(0deg, color-mix(in oklab, var(--background) 55%, transparent) 0 2px, transparent 2px 6px);
-  background-position: 0 0;
-}
-
-.lockout-fracture {
-  pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.2;
   background:
-    linear-gradient(113deg, transparent 0 33%, var(--destructive-foreground) 33.1% 33.25%, transparent 33.35%),
-    linear-gradient(68deg, transparent 0 66%, var(--background) 66.1% 66.45%, transparent 66.55%),
-    linear-gradient(174deg, transparent 0 43%, color-mix(in oklab, var(--destructive-foreground) 45%, transparent) 43.1% 43.25%, transparent 43.35%);
-  clip-path: polygon(0 4%, 100% 0, 94% 24%, 100% 45%, 87% 68%, 100% 96%, 55% 91%, 26% 100%, 0 86%, 8% 56%);
+    repeating-linear-gradient(0deg, transparent 0 29px, color-mix(in oklab, var(--destructive-foreground) 12%, transparent) 29px 30px),
+    radial-gradient(circle at 30% 40%, color-mix(in oklab, var(--destructive-foreground) 12%, transparent), transparent 32%);
 }
 
-.lockout-slashes span {
+.lockout-shadow {
+  pointer-events: none;
+  opacity: 0.45;
+  background:
+    linear-gradient(108deg, transparent 0 27%, color-mix(in oklab, var(--background) 35%, transparent) 44%, transparent 62%),
+    radial-gradient(ellipse at center, transparent 30%, color-mix(in oklab, var(--background) 42%, transparent) 100%);
+}
+
+.lockout-pencil {
   position: absolute;
-  top: var(--slash-y);
-  left: 4vw;
-  width: var(--slash-width);
+  width: 42vw;
   height: 1px;
-  transform-origin: left center;
-  background: color-mix(in oklab, var(--destructive-foreground) 62%, transparent);
-  box-shadow: 0 0 8px color-mix(in oklab, var(--destructive-foreground) 38%, transparent);
-  animation: slash-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) var(--slash-delay) both;
+  background: color-mix(in oklab, var(--destructive-foreground) 24%, transparent);
+  opacity: 0.55;
 }
 
-.lockout-slashes span:nth-child(even) {
-  left: auto;
-  right: 3vw;
-  transform-origin: right center;
-}
+.lockout-pencil-one { top: 22%; left: -8%; transform: rotate(8deg); }
+.lockout-pencil-two { right: -7%; bottom: 19%; transform: rotate(-11deg); }
 
 .lockout-copy {
   position: relative;
   z-index: 2;
-  animation: soft-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-  text-shadow: -3px 0 var(--glitch-cyan), 3px 0 var(--glitch-red), 0 0 22px var(--destructive-foreground);
+  animation: lockout-slam 0.68s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+  text-shadow: 0 10px 34px color-mix(in oklab, var(--background) 48%, transparent);
 }
 
 .lockout-cross {
   z-index: 2;
-  animation: cross-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: lockout-slam 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.lockout-frame {
-  z-index: 1;
-  border: 1px solid color-mix(in oklab, var(--destructive-foreground) 18%, transparent);
-  clip-path: polygon(0 0, 18% 0, 18% 1px, 82% 1px, 82% 0, 100% 0, 100% 22%, calc(100% - 1px) 22%, calc(100% - 1px) 78%, 100% 78%, 100% 100%, 82% 100%, 82% calc(100% - 1px), 18% calc(100% - 1px), 18% 100%, 0 100%, 0 78%, 1px 78%, 1px 22%, 0 22%);
+.lockout-stroke {
+  --stroke-angle: 45deg;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 13px;
+  transform-origin: center;
+  border-radius: 55% 40% 48% 45%;
+  background: var(--destructive-foreground);
+  box-shadow: 0 0 24px color-mix(in oklab, var(--destructive-foreground) 44%, transparent);
+  animation: marker-draw 0.26s ease-out 0.2s both;
 }
 
-.lockout-index,
-.lockout-subcopy,
-.lockout-code {
+.lockout-stroke-two {
+  --stroke-angle: -45deg;
+  animation-delay: 0.3s;
+}
+
+.lockout-subcopy {
+  position: relative;
   z-index: 2;
-  animation: soft-rise 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+  animation: soft-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
 }
 
 .diary-shell > header,
@@ -438,62 +453,46 @@
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 78% 26%, color-mix(in oklab, var(--relation-respect) 5%, transparent), transparent 30%),
-    radial-gradient(circle at 18% 76%, color-mix(in oklab, var(--relation-rival) 4%, transparent), transparent 26%),
-    repeating-linear-gradient(90deg, transparent 0 11.9vw, color-mix(in oklab, var(--cream) 3%, transparent) 12vw calc(12vw + 1px));
+  background: radial-gradient(ellipse at 50% 12%, color-mix(in oklab, var(--cream) 5%, transparent), transparent 56%);
 }
 
-.diary-ambient-orbit {
+.diary-window-light {
   position: absolute;
-  top: 53%;
-  left: 50%;
-  width: min(78vw, 58rem);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border: 1px dashed color-mix(in oklab, var(--cream) 7%, transparent);
-  border-radius: 9999px;
-  animation: ambient-orbit 80s linear infinite;
+  top: -15%;
+  left: 54%;
+  width: 38%;
+  height: 130%;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--cream) 7%, transparent), transparent);
+  filter: blur(18px);
+  animation: classroom-light 18s ease-in-out infinite;
 }
 
-.diary-ambient-orbit::before,
-.diary-ambient-orbit::after {
-  content: "";
+.diary-paper-shadow {
+  --paper-angle: -8deg;
   position: absolute;
-  inset: 15%;
+  width: 17rem;
+  height: 23rem;
   border: 1px solid color-mix(in oklab, var(--cream) 4%, transparent);
-  border-radius: inherit;
+  box-shadow: 22px 26px 60px color-mix(in oklab, var(--background) 78%, transparent);
+  opacity: 0.3;
+  animation: paper-drift 22s ease-in-out infinite;
 }
 
-.diary-ambient-orbit::after {
-  inset: 33%;
-  border-style: dotted;
-}
+.diary-paper-shadow-one { left: -9rem; top: 22%; }
+.diary-paper-shadow-two { --paper-angle: 11deg; right: -10rem; bottom: 4%; animation-delay: -11s; }
 
-.diary-ambient-line {
+.diary-dust {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  transform-origin: center;
-  background: linear-gradient(transparent, color-mix(in oklab, var(--cream) 11%, transparent), transparent);
-  animation: ambient-breathe 11s ease-in-out infinite;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--cream);
+  box-shadow: 42px 80px 0 color-mix(in oklab, var(--cream) 40%, transparent), 110px 18px 0 color-mix(in oklab, var(--cream) 34%, transparent), 170px 120px 0 color-mix(in oklab, var(--cream) 28%, transparent), 230px 48px 0 color-mix(in oklab, var(--cream) 30%, transparent);
+  animation: dust-float 14s ease-in-out infinite;
 }
 
-.diary-ambient-line-one { left: 9%; }
-.diary-ambient-line-two { right: 8%; animation-delay: -5.5s; }
-
-.diary-ambient-index {
-  position: absolute;
-  right: 2.25rem;
-  top: 42%;
-  color: var(--cream);
-  font-family: ui-monospace, monospace;
-  font-size: 0.5rem;
-  letter-spacing: 0.32em;
-  writing-mode: vertical-rl;
-  animation: ambient-index 14s ease-in-out infinite;
-}
+.diary-dust-one { left: 14%; top: 24%; }
+.diary-dust-two { right: 24%; bottom: 18%; animation-delay: -7s; }
 
 .music-control [data-slot="slider-track"] {
   border-radius: 0;
@@ -687,22 +686,21 @@
 
 @media (prefers-reduced-motion: reduce) {
   .lockout-scene,
-  .lockout-scanlines,
   .lockout-copy,
   .lockout-cross {
     animation: none;
   }
 
-  .lockout-slashes span,
+  .lockout-stroke,
   .diary-entry-iris,
   .diary-entry-ring,
   .diary-entry-sweep,
   .diary-entry-mark,
   .blog-atmosphere::before,
   .blog-rain span,
-  .diary-ambient-orbit,
-  .diary-ambient-line,
-  .diary-ambient-index {
+  .diary-window-light,
+  .diary-paper-shadow,
+  .diary-dust {
     animation: none;
   }
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import { Minus, Plus, Crosshair, X } from "lucide-react";
+import { Minus, Plus, Crosshair, Expand, X } from "lucide-react";
 import { characters, connections, relationMeta, type Character } from "@/data/relationships";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ export function RelationshipGraph() {
   const [zoom, setZoom] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [selected, setSelected] = useState<Character | null>(null);
+  const [expandedImage, setExpandedImage] = useState<Character | null>(null);
   const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
 
   const stateRef = useRef({ zoom, offset });
@@ -213,9 +214,22 @@ export function RelationshipGraph() {
                 </Button>
               </div>
               {selected.image ? (
-                <div className="mt-4 h-40 overflow-hidden border border-border bg-secondary">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    diaryAudio.play("node");
+                    setExpandedImage(selected);
+                  }}
+                  className="group/photo relative mt-4 h-40 w-full overflow-hidden rounded-none border border-border bg-secondary p-0 shadow-none hover:bg-secondary"
+                  aria-label={`Enlarge ${selected.name}'s photo`}
+                >
                   <img src={selected.image} alt={selected.name} className="h-full w-full object-contain object-top" draggable={false} />
-                </div>
+                   <span className="absolute right-2 bottom-2 flex h-7 w-7 items-center justify-center border border-cream/25 bg-background/75 text-cream/70 opacity-0 backdrop-blur-sm transition-opacity group-hover/photo:opacity-100">
+                     <Expand className="h-3.5 w-3.5" />
+                   </span>
+                </Button>
               ) : null}
               <h3 className="mt-4 font-[family-name:var(--font-display)] text-2xl text-cream italic">{selected.name}</h3>
               <p className="mt-3 text-sm leading-[1.85] text-cream/90 italic">{selected.note}</p>
@@ -260,6 +274,36 @@ export function RelationshipGraph() {
           </Button>
         ))}
       </div>
+
+      {expandedImage?.image ? (
+        <div
+          className="photo-lightbox animate-soft-rise fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-5 backdrop-blur-md md:p-10"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${expandedImage.name}'s enlarged photo`}
+          onClick={() => {
+            diaryAudio.play("close");
+            setExpandedImage(null);
+          }}
+        >
+          <img
+            src={expandedImage.image}
+            alt={expandedImage.name}
+            className="max-h-[88dvh] max-w-[92vw] border border-border object-contain shadow-2xl"
+            draggable={false}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label="Close enlarged photo"
+            onClick={() => setExpandedImage(null)}
+            className="absolute top-5 right-5 rounded-none border border-border bg-background/80 text-cream shadow-none hover:bg-accent"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }
