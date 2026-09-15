@@ -1405,7 +1405,7 @@
   bottom: 0;
   width: 13rem;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
   overflow: hidden;
 }
 .feed-margin-left { left: -15rem; }
