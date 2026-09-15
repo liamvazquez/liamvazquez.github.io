@@ -66,7 +66,7 @@ export function RelationshipGraph() {
   };
 
   return (
-    <div className="relative h-[calc(100dvh-8.5rem)] w-full overflow-hidden">
+    <div className="relative h-[calc(100dvh-15rem)] min-h-[520px] w-full overflow-hidden">
       <div
         ref={containerRef}
         className="h-full w-full cursor-grab touch-none active:cursor-grabbing"
@@ -77,7 +77,6 @@ export function RelationshipGraph() {
             ox: stateRef.current.offset.x,
             oy: stateRef.current.offset.y,
           };
-          e.currentTarget.setPointerCapture(e.pointerId);
         }}
         onPointerMove={(e) => {
           const d = drag.current;

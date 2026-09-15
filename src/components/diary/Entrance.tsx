@@ -60,7 +60,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
       <img
         src={liamAvatar.url}
         alt="Liam Vazquez standing in his school uniform"
-        className="absolute inset-0 h-full w-full scale-105 object-contain opacity-30 brightness-[0.55] contrast-[1.1] saturate-[0.7]"
+        className="absolute inset-0 h-full w-full scale-105 object-contain opacity-45 brightness-[0.6] contrast-[1.1] saturate-[0.7]"
       />
       <div className="vignette absolute inset-0" />
 
