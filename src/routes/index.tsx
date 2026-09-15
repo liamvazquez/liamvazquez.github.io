@@ -57,10 +57,11 @@ function Index() {
   return (
     <main className="diary-shell animate-veil-in grain relative min-h-dvh overflow-hidden bg-background">
       <div className="diary-ambient" aria-hidden="true">
-        <span className="diary-ambient-orbit" />
-        <span className="diary-ambient-line diary-ambient-line-one" />
-        <span className="diary-ambient-line diary-ambient-line-two" />
-        <span className="diary-ambient-index">LV · 0915 · PRIVATE RECORD · MIDORI</span>
+        <span className="diary-window-light" />
+        <span className="diary-paper-shadow diary-paper-shadow-one" />
+        <span className="diary-paper-shadow diary-paper-shadow-two" />
+        <span className="diary-dust diary-dust-one" />
+        <span className="diary-dust diary-dust-two" />
       </div>
       <header className="flex items-start justify-between gap-6 px-5 pt-6 md:px-10">
         <VisitorCounter count={visits} />

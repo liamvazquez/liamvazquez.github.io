@@ -39,40 +39,22 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
   if (stage === "rejected") {
     return (
       <div className="lockout-scene grain fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-destructive px-6 select-none">
-        <div className="lockout-scanlines absolute inset-0" />
-        <div className="lockout-fracture absolute inset-0" aria-hidden="true" />
-        <div className="lockout-slashes absolute inset-0" aria-hidden="true">
-          <span style={{ "--slash-y": "14%", "--slash-width": "48%", "--slash-delay": "0.02s", "--slash-angle": "7deg" } as React.CSSProperties} />
-          <span style={{ "--slash-y": "31%", "--slash-width": "77%", "--slash-delay": "0.11s", "--slash-angle": "-4deg" } as React.CSSProperties} />
-          <span style={{ "--slash-y": "53%", "--slash-width": "35%", "--slash-delay": "0.21s", "--slash-angle": "12deg" } as React.CSSProperties} />
-          <span style={{ "--slash-y": "71%", "--slash-width": "64%", "--slash-delay": "0.29s", "--slash-angle": "-9deg" } as React.CSSProperties} />
-          <span style={{ "--slash-y": "88%", "--slash-width": "43%", "--slash-delay": "0.38s", "--slash-angle": "5deg" } as React.CSSProperties} />
-        </div>
-        <div className="lockout-frame absolute inset-5 md:inset-9" aria-hidden="true" />
-        <div className="lockout-index absolute top-[16%] right-7 text-right font-mono text-[0.52rem] leading-loose tracking-editorial text-destructive-foreground/45 uppercase md:right-12">
-          <span className="block">Subject // LV-0915</span>
-          <span className="block">Clearance // denied</span>
-          <span className="block">Archive seal // broken</span>
-        </div>
-        <span className="absolute top-7 left-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Access revoked // 00:00:00</span>
-        <span className="absolute right-7 bottom-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Do not return</span>
-        <div className="animate-cross-draw lockout-cross relative h-40 w-40 md:h-56 md:w-56">
-          <span className="absolute top-1/2 left-0 h-[10px] w-full -translate-y-1/2 rotate-45 bg-destructive-foreground shadow-[0_0_30px_var(--destructive-foreground)]" />
-          <span className="absolute top-1/2 left-0 h-[10px] w-full -translate-y-1/2 -rotate-45 bg-destructive-foreground shadow-[0_0_30px_var(--destructive-foreground)]" />
+        <div className="lockout-paper absolute inset-0" aria-hidden="true" />
+        <div className="lockout-shadow absolute inset-0" aria-hidden="true" />
+        <span className="lockout-pencil lockout-pencil-one" aria-hidden="true" />
+        <span className="lockout-pencil lockout-pencil-two" aria-hidden="true" />
+        <div className="lockout-cross relative h-40 w-40 md:h-56 md:w-56" aria-hidden="true">
+          <span className="lockout-stroke lockout-stroke-one" />
+          <span className="lockout-stroke lockout-stroke-two" />
         </div>
         <p
-          className="lockout-copy animate-soft-rise mt-14 text-center font-[family-name:var(--font-display)] text-4xl text-destructive-foreground md:text-6xl"
-          data-text="Then fuck off then."
-          style={{ animationDelay: "0.35s" }}
+          className="lockout-copy mt-12 text-center font-[family-name:var(--font-display)] text-5xl font-semibold text-destructive-foreground italic md:text-7xl"
         >
           Then fuck off then.
         </p>
-        <p className="lockout-subcopy mt-5 max-w-md text-center text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">
-          You made your choice. The archive is closed.
+        <p className="lockout-subcopy mt-5 text-center font-[family-name:var(--font-display)] text-lg text-destructive-foreground/65 italic">
+          Reload it yourself if you’re that desperate.
         </p>
-        <span className="lockout-code absolute bottom-7 left-7 font-mono text-[0.52rem] tracking-editorial text-destructive-foreground/45 uppercase">Error 403 // permanent</span>
-        <div className="absolute top-[18%] left-0 h-px w-[42%] rotate-6 bg-destructive-foreground/30" />
-        <div className="absolute right-0 bottom-[23%] h-px w-[48%] -rotate-12 bg-destructive-foreground/30" />
       </div>
     );
   }

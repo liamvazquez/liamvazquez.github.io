@@ -168,9 +168,10 @@ class DiaryAudio {
         this.slidingTone(NOTES.e3, NOTES.b2, t, 0.18, 0.1, "triangle");
         break;
       case "denial":
-        this.slidingTone(122, 38, t, 0.42, 0.28, "sawtooth");
-        this.slidingTone(94, 188, t + 0.04, 0.72, 0.12, "square");
-        this.noise(t, 0.52, 0.2, 1700);
+        this.slidingTone(88, 34, t, 0.5, 0.34, "sine");
+        this.tone(55, t, 0.62, 0.26, "sine");
+        this.noise(t, 0.16, 0.16, 190);
+        this.noise(t + 0.18, 0.48, 0.045, 720);
         break;
       case "section":
         this.tone(NOTES.d4, t, 0.1, 0.055, "triangle");
