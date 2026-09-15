@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      post_likes: {
+        Row: {
+          likes: number
+          post_id: string
+          updated_at: string
+        }
+        Insert: {
+          likes?: number
+          post_id: string
+          updated_at?: string
+        }
+        Update: {
+          likes?: number
+          post_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_counters: {
         Row: {
           count: number
@@ -37,6 +55,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      adjust_post_like: {
+        Args: { _delta: number; _post_id: string }
+        Returns: number
+      }
       increment_diary_visit: { Args: never; Returns: number }
     }
     Enums: {
