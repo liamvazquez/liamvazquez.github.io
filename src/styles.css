@@ -393,6 +393,18 @@
   filter: drop-shadow(0 0 4px var(--cream));
 }
 
+.relationship-card {
+  left: var(--relationship-card-x);
+  top: var(--relationship-card-y);
+}
+
+@media (max-width: 640px) {
+  .relationship-card {
+    left: -9rem;
+    top: -19rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lockout-scene,
   .lockout-scanlines,

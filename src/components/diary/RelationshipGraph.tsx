@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { Minus, Plus, Crosshair, X } from "lucide-react";
 import { characters, connections, relationMeta, type Character } from "@/data/relationships";
 import { cn } from "@/lib/utils";
@@ -147,7 +148,7 @@ export function RelationshipGraph() {
                 }}
                 className={cn(
                   "group absolute h-auto rounded-full p-0 shadow-none hover:bg-transparent",
-                  isLiam && "liam-node-shell",
+                  isLiam && "liam-node-shell [&_svg]:size-full",
                 )}
                 style={{ left: ch.x - size / 2, top: ch.y - size / 2, width: size }}
               >
@@ -184,8 +185,11 @@ export function RelationshipGraph() {
 
           {selected ? (
             <div
-              className="animate-soft-rise absolute w-[18rem] border border-border bg-card/95 p-5 backdrop-blur-sm"
-              style={{ left: selected.x + NODE * 0.8, top: selected.y - 20 }}
+              className="relationship-card animate-soft-rise absolute w-[18rem] border border-border bg-card/95 p-5 backdrop-blur-sm"
+              style={{
+                "--relationship-card-x": `${selected.x + NODE * 0.8}px`,
+                "--relationship-card-y": `${selected.y - 20}px`,
+              } as CSSProperties}
             >
               <div className="flex items-start justify-between gap-3">
                 <p className="text-[0.62rem] tracking-editorial uppercase" style={{ color: accentFor(selected) }}>
