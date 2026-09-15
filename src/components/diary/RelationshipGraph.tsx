@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Minus, Plus, Crosshair, X } from "lucide-react";
 import { characters, connections, relationMeta, type Character } from "@/data/relationships";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const MIN_ZOOM = 0.4;
 const MAX_ZOOM = 3;
@@ -136,30 +137,48 @@ export function RelationshipGraph() {
             const isLiam = ch.id === "liam";
             const size = isLiam ? NODE : NODE * 0.7;
             return (
-              <button
+              <Button
+                type="button"
+                variant="ghost"
                 key={ch.id}
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelected((s) => (s?.id === ch.id ? null : ch));
                 }}
-                className="group absolute flex flex-col items-center"
+                className={cn(
+                  "group absolute h-auto rounded-full p-0 shadow-none hover:bg-transparent",
+                  isLiam && "liam-node-shell",
+                )}
                 style={{ left: ch.x - size / 2, top: ch.y - size / 2, width: size }}
               >
                 <span
                   className={cn(
-                    "relative flex items-center justify-center overflow-hidden rounded-full border bg-secondary/90 px-4 text-center transition-all duration-500",
+                    "relative flex items-center justify-center rounded-full border bg-secondary/90 px-4 text-center transition-all duration-500",
+                    isLiam && "liam-node-core",
                     selected?.id === ch.id
                       ? "shadow-[0_0_40px_-6px_color-mix(in_oklab,var(--cream)_50%,transparent)]"
                       : "border-border group-hover:border-cream/60",
                   )}
                   style={{ width: size, height: size, borderColor: accentFor(ch) }}
                 >
+                  {isLiam ? (
+                    <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 132 132" aria-hidden="true">
+                      <ellipse className="liam-orbit" cx="66" cy="66" rx="55" ry="23" transform="rotate(-24 66 66)" />
+                      <ellipse className="liam-orbit liam-orbit-secondary" cx="66" cy="66" rx="52" ry="20" transform="rotate(62 66 66)" />
+                      <path className="liam-basketball-seam" d="M18 36 C54 51 77 83 112 101" />
+                      <path className="liam-basketball-seam" d="M34 115 C46 80 85 48 102 20" />
+                      <path className="liam-molecule" d="M103 48l8-5 8 5v10l-8 5-8-5zM111 43v-8M119 58l7 4" />
+                      <path className="liam-court-mark" d="M42 19h18M51 13v12" />
+                      <circle className="liam-electron" cx="16" cy="66" r="2.2" />
+                      <circle className="liam-electron" cx="105" cy="30" r="1.8" />
+                    </svg>
+                  ) : null}
                   <span className="font-[family-name:var(--font-display)] text-lg leading-tight text-cream italic">
                     {ch.name}
                   </span>
                   <span className="absolute right-[18%] bottom-[15%] h-1.5 w-1.5 rounded-full" style={{ backgroundColor: accentFor(ch) }} />
                 </span>
-              </button>
+              </Button>
             );
           })}
 
@@ -172,16 +191,19 @@ export function RelationshipGraph() {
                 <p className="text-[0.62rem] tracking-editorial uppercase" style={{ color: accentFor(selected) }}>
                   {tagFor(selected)}
                 </p>
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelected(null);
                   }}
-                  className="text-ash transition-colors hover:text-cream"
+                  className="h-7 w-7 rounded-full text-ash shadow-none transition-colors hover:bg-accent hover:text-cream"
                   aria-label="Close card"
                 >
                   <X className="h-3.5 w-3.5" />
-                </button>
+                </Button>
               </div>
               {selected.image ? (
                 <div className="mt-4 h-40 overflow-hidden border border-border bg-secondary">
@@ -196,13 +218,16 @@ export function RelationshipGraph() {
       </div>
 
       {/* Legend */}
-      <div className="absolute bottom-5 left-5 border border-border bg-black/70 px-5 py-4 backdrop-blur-sm">
+      <div className="absolute bottom-5 left-5 w-[calc(100%-6.5rem)] max-w-[44rem] border border-border bg-background/80 px-4 py-4 backdrop-blur-sm md:px-5">
         <p className="text-[0.6rem] tracking-editorial text-ash uppercase">Legend</p>
-        <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2">
+        <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 md:grid-cols-3 md:gap-x-7">
           {Object.entries(relationMeta).map(([key, meta]) => (
-            <li key={key} className="flex items-center gap-2">
-              <span className="h-[2px] w-5 rounded-full" style={{ backgroundColor: meta.color }} />
-              <span className="text-[0.68rem] text-cream/80">{meta.label}</span>
+            <li key={key} className="flex min-w-0 items-start gap-2">
+              <span className="mt-1.5 h-[2px] w-5 shrink-0 rounded-full" style={{ backgroundColor: meta.color }} />
+              <span className="min-w-0">
+                <span className="block text-[0.65rem] leading-tight text-cream/85">{meta.label}</span>
+                <span className="mt-0.5 block text-[0.55rem] leading-tight text-ash">{meta.description}</span>
+              </span>
             </li>
           ))}
         </ul>
@@ -215,14 +240,17 @@ export function RelationshipGraph() {
           { icon: Minus, action: () => buttonZoom(-1), label: "Zoom out" },
           { icon: Crosshair, action: centerView, label: "Recenter" },
         ].map(({ icon: Icon, action, label }) => (
-          <button
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
             key={label}
             onClick={action}
             aria-label={label}
-            className="border border-border bg-black/70 p-2.5 text-cream/70 backdrop-blur-sm transition-colors hover:border-cream/60 hover:text-cream"
+            className="rounded-none border border-border bg-background/80 text-cream/70 shadow-none backdrop-blur-sm transition-colors hover:border-cream/60 hover:bg-accent hover:text-cream"
           >
             <Icon className="h-4 w-4" strokeWidth={1.2} />
-          </button>
+          </Button>
         ))}
       </div>
     </div>

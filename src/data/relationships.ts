@@ -1,14 +1,26 @@
 import liamAvatar from "@/assets/liam-avatar.png.asset.json";
 
-export type RelationType = "hate" | "love" | "friend" | "complicated" | "rival" | "family";
+export type RelationType =
+  | "hate"
+  | "love"
+  | "crush"
+  | "friend"
+  | "respect"
+  | "rival"
+  | "complicated"
+  | "family"
+  | "acquaintance";
 
-export const relationMeta: Record<RelationType, { label: string; color: string }> = {
-  hate: { label: "Hatred", color: "#e0252b" },
-  love: { label: "Romantic love", color: "#f27cae" },
-  friend: { label: "Friendship", color: "#4a90e2" },
-  complicated: { label: "Complicated", color: "#9b6cd6" },
-  rival: { label: "Rivalry", color: "#f08a24" },
-  family: { label: "Family", color: "#46b06a" },
+export const relationMeta: Record<RelationType, { label: string; description: string; color: string }> = {
+  hate: { label: "Hatred", description: "Hostility", color: "var(--relation-hate)" },
+  love: { label: "Romantic love", description: "Devotion", color: "var(--relation-love)" },
+  crush: { label: "Crush", description: "Unsaid attraction", color: "var(--relation-crush)" },
+  friend: { label: "Friendship", description: "Trusted circle", color: "var(--relation-friend)" },
+  respect: { label: "Respect / Admiration", description: "Earned regard", color: "var(--relation-respect)" },
+  rival: { label: "Rivalry", description: "Competitive tension", color: "var(--relation-rival)" },
+  complicated: { label: "Complicated", description: "Hard to define", color: "var(--relation-complicated)" },
+  family: { label: "Family", description: "Blood and bonds", color: "var(--relation-family)" },
+  acquaintance: { label: "Acquaintance / Distant", description: "Peripheral", color: "var(--relation-acquaintance)" },
 };
 
 export type Character = {
