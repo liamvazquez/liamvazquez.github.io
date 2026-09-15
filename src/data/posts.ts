@@ -27,7 +27,7 @@ export const diaryPosts: DiaryPost[] = [
     imageAlt: "Liam sitting outside at dusk, reading in his school uniform",
     caption:
       "First day at Midori High.\n\nThe basketball court looks good, I might sign up to a club.",
-    likes: 742,
+    likes: 17,
     comments: 0,
     location: "Midori High",
   },

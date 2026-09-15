@@ -65,6 +65,18 @@ export function RelationshipGraph() {
     zoomAt(rect.width / 2, rect.height / 2, stateRef.current.zoom * (dir === 1 ? 1.25 : 0.8));
   };
 
+  const accentFor = (character: Character) => {
+    if (character.id === "liam") return "var(--cream)";
+    const connection = connections.find((item) => item.from === character.id || item.to === character.id);
+    return connection ? relationMeta[connection.type].color : "var(--ash)";
+  };
+
+  const tagFor = (character: Character) => {
+    if (character.id === "liam") return character.role ?? "That's me";
+    const connection = connections.find((item) => item.from === character.id || item.to === character.id);
+    return connection ? relationMeta[connection.type].label : character.role ?? "Connection";
+  };
+
   return (
     <div className="relative h-[calc(100dvh-15rem)] min-h-[520px] w-full overflow-hidden">
       <div
@@ -135,24 +147,17 @@ export function RelationshipGraph() {
               >
                 <span
                   className={cn(
-                    "relative block overflow-hidden rounded-full border bg-secondary transition-all duration-500",
+                    "relative flex items-center justify-center overflow-hidden rounded-full border bg-secondary/90 px-4 text-center transition-all duration-500",
                     selected?.id === ch.id
-                      ? "border-cream shadow-[0_0_40px_-6px_rgba(240,225,200,0.5)]"
+                      ? "shadow-[0_0_40px_-6px_color-mix(in_oklab,var(--cream)_50%,transparent)]"
                       : "border-border group-hover:border-cream/60",
                   )}
-                  style={{ width: size, height: size }}
+                  style={{ width: size, height: size, borderColor: accentFor(ch) }}
                 >
-                  {ch.image ? (
-                    <img
-                      src={ch.image}
-                      alt={ch.name}
-                      className="h-full w-full scale-[1.55] object-contain object-top"
-                      draggable={false}
-                    />
-                  ) : null}
-                </span>
-                <span className="mt-3 font-[family-name:var(--font-display)] text-base whitespace-nowrap text-cream italic">
-                  {ch.name}
+                  <span className="font-[family-name:var(--font-display)] text-lg leading-tight text-cream italic">
+                    {ch.name}
+                  </span>
+                  <span className="absolute right-[18%] bottom-[15%] h-1.5 w-1.5 rounded-full" style={{ backgroundColor: accentFor(ch) }} />
                 </span>
               </button>
             );
@@ -160,12 +165,12 @@ export function RelationshipGraph() {
 
           {selected ? (
             <div
-              className="animate-soft-rise absolute w-[17rem] border border-border bg-card/95 p-5 backdrop-blur-sm"
+              className="animate-soft-rise absolute w-[18rem] border border-border bg-card/95 p-5 backdrop-blur-sm"
               style={{ left: selected.x + NODE * 0.8, top: selected.y - 20 }}
             >
               <div className="flex items-start justify-between gap-3">
-                <p className="text-[0.62rem] tracking-editorial text-ash uppercase">
-                  {selected.role ?? "Connection"}
+                <p className="text-[0.62rem] tracking-editorial uppercase" style={{ color: accentFor(selected) }}>
+                  {tagFor(selected)}
                 </p>
                 <button
                   onClick={(e) => {
@@ -178,6 +183,12 @@ export function RelationshipGraph() {
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
+              {selected.image ? (
+                <div className="mt-4 h-40 overflow-hidden border border-border bg-secondary">
+                  <img src={selected.image} alt={selected.name} className="h-full w-full object-contain object-top" draggable={false} />
+                </div>
+              ) : null}
+              <h3 className="mt-4 font-[family-name:var(--font-display)] text-2xl text-cream italic">{selected.name}</h3>
               <p className="mt-3 text-sm leading-[1.85] text-cream/90 italic">{selected.note}</p>
             </div>
           ) : null}

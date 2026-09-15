@@ -186,6 +186,37 @@
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
+@keyframes lockout-jitter {
+  0%, 92%, 100% { transform: translate(0); }
+  93% { transform: translate(-3px, 2px); }
+  95% { transform: translate(4px, -2px); }
+  97% { transform: translate(-2px, -1px); }
+}
+
+@keyframes lockout-pulse {
+  0%, 100% { background-color: oklch(0.34 0.18 25); filter: contrast(1); }
+  45% { background-color: oklch(0.44 0.24 27); filter: contrast(1.15); }
+  48% { background-color: oklch(0.2 0.12 25); filter: contrast(1.5); }
+  52% { background-color: oklch(0.48 0.26 28); filter: contrast(1.2); }
+}
+
+@keyframes scanline-roll {
+  from { background-position: 0 0; }
+  to { background-position: 0 12px; }
+}
+
+@keyframes chroma-kick {
+  0%, 88%, 100% { transform: translate(0); text-shadow: -3px 0 var(--glitch-cyan), 3px 0 var(--glitch-red); }
+  90% { transform: translateX(-7px) skewX(5deg); text-shadow: 8px 0 var(--glitch-cyan), -8px 0 var(--glitch-red); }
+  93% { transform: translateX(6px) skewX(-4deg); }
+}
+
+@keyframes cross-kick {
+  0%, 90%, 100% { transform: scale(1) rotate(0); }
+  92% { transform: scale(1.08) rotate(2deg); }
+  95% { transform: scale(0.96) rotate(-2deg); }
+}
+
 @utility animate-glitch-out {
   animation: glitch-shift 0.62s steps(2, end) forwards;
 }
@@ -204,7 +235,7 @@
 
 @utility vignette {
   background:
-    radial-gradient(ellipse at center, transparent 8%, rgba(0, 0, 0, 0.62) 58%, rgba(0, 0, 0, 0.96) 100%);
+    radial-gradient(ellipse at 65% 48%, transparent 7%, color-mix(in oklab, var(--background) 62%, transparent) 58%, var(--background) 100%);
 }
 
 @utility grain {
@@ -225,5 +256,64 @@
 @layer base {
   body {
     font-family: var(--font-sans);
+  }
+}
+
+.entrance-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, color-mix(in oklab, var(--background) 94%, transparent) 0%, color-mix(in oklab, var(--background) 52%, transparent) 52%, color-mix(in oklab, var(--background) 12%, transparent) 100%),
+    repeating-linear-gradient(90deg, transparent 0 14.9%, color-mix(in oklab, var(--cream) 5%, transparent) 15% 15.1%);
+}
+
+.entrance-tape {
+  clip-path: polygon(4% 12%, 96% 0, 100% 88%, 2% 100%);
+}
+
+.lockout-scene {
+  --glitch-cyan: oklch(0.81 0.15 195);
+  --glitch-red: oklch(0.68 0.25 25);
+  animation: lockout-pulse 1.15s steps(2, end) infinite, lockout-jitter 0.85s steps(1, end) infinite;
+}
+
+.lockout-scanlines {
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.28;
+  background: repeating-linear-gradient(0deg, color-mix(in oklab, var(--background) 55%, transparent) 0 2px, transparent 2px 6px);
+  animation: scanline-roll 0.3s linear infinite;
+}
+
+.lockout-fracture {
+  pointer-events: none;
+  opacity: 0.5;
+  background:
+    linear-gradient(113deg, transparent 0 33%, var(--destructive-foreground) 33.1% 33.25%, transparent 33.35%),
+    linear-gradient(68deg, transparent 0 66%, var(--background) 66.1% 66.45%, transparent 66.55%),
+    linear-gradient(174deg, transparent 0 43%, color-mix(in oklab, var(--destructive-foreground) 45%, transparent) 43.1% 43.25%, transparent 43.35%);
+  clip-path: polygon(0 4%, 100% 0, 94% 24%, 100% 45%, 87% 68%, 100% 96%, 55% 91%, 26% 100%, 0 86%, 8% 56%);
+}
+
+.lockout-copy {
+  position: relative;
+  z-index: 2;
+  animation: chroma-kick 0.9s steps(2, end) infinite;
+  text-shadow: -3px 0 var(--glitch-cyan), 3px 0 var(--glitch-red), 0 0 22px var(--destructive-foreground);
+}
+
+.lockout-cross {
+  z-index: 2;
+  animation: cross-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) both, cross-kick 0.72s steps(2, end) 0.7s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lockout-scene,
+  .lockout-scanlines,
+  .lockout-copy,
+  .lockout-cross {
+    animation: none;
   }
 }
