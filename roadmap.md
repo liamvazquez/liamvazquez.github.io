@@ -32,3 +32,4 @@
 - [x] Add moving optical refraction directly through the denial headline
 - [x] Refine windshield droplets and energize the feed’s school-diary backdrop
 - [x] Change the feed welcome line to “WELCOME, I GUESS”
+- [x] Remove the stray headline refraction artifact and smooth the floating denial X

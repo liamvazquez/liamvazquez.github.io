@@ -279,9 +279,9 @@
 }
 
 @keyframes lockout-pulse {
-  0% { background-color: oklch(0.72 0.25 27); transform: scale(1.2); filter: brightness(1.9); }
-  9% { background-color: oklch(0.38 0.18 25); transform: scale(0.985); filter: brightness(0.8); }
-  18% { transform: scale(1.015); filter: brightness(1.1); }
+  0% { background-color: oklch(0.66 0.23 27); transform: scale(1.13); filter: brightness(1.5); }
+  14% { background-color: oklch(0.39 0.18 25); transform: scale(0.992); filter: brightness(0.88); }
+  31% { transform: scale(1.008); filter: brightness(1.04); }
   100% { background-color: oklch(0.42 0.19 25); transform: scale(1); filter: brightness(1); }
 }
 
@@ -295,6 +295,12 @@
 @keyframes marker-draw {
   from { transform: translateY(-50%) rotate(var(--stroke-angle)) scaleX(0); }
   to { transform: translateY(-50%) rotate(var(--stroke-angle)) scaleX(1); }
+}
+
+@keyframes cross-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-0.45deg); }
+  48% { transform: translate3d(0, -8px, 0) rotate(0.55deg); }
+  72% { transform: translate3d(2px, -5px, 0) rotate(0.2deg); }
 }
 
 @keyframes denial-shake {
@@ -371,11 +377,6 @@
 @keyframes window-rain-haze {
   from { transform: translate3d(2%, -45%, 0); }
   to { transform: translate3d(-4%, 45%, 0); }
-}
-
-@keyframes rain-refraction {
-  0% { mask-position: 9% -30%, 29% -60%, 47% -15%, 67% -45%, 88% -75%; }
-  100% { mask-position: 9% 145%, 29% 160%, 47% 135%, 67% 155%, 88% 170%; }
 }
 
 @keyframes rain-note-write {
@@ -466,12 +467,12 @@
 }
 
 .lockout-scene {
-  animation: lockout-pulse 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  animation: lockout-pulse 0.95s cubic-bezier(0.16, 0.75, 0.24, 1) both;
   transform-origin: center;
 }
 
 .lockout-impact {
-  animation: denial-shake 0.92s cubic-bezier(0.22, 0.75, 0.25, 1) both;
+  animation: denial-shake 1.08s cubic-bezier(0.16, 0.72, 0.22, 1) both;
   transform-origin: center;
 }
 
@@ -530,7 +531,7 @@
     repeating-linear-gradient(99deg, transparent 0 61px, color-mix(in oklab, var(--destructive-foreground) 12%, transparent) 62px 63px, transparent 64px 109px);
   background-size: 71px 113px, 127px 181px;
   filter: blur(0.35px);
-  animation: window-rain-haze 1.85s linear infinite;
+  animation: window-rain-haze 2.65s linear infinite;
 }
 
 .lockout-raindrop {
@@ -661,35 +662,17 @@
 .lockout-copy {
   position: relative;
   display: inline-block;
-  animation: lockout-copy-loop 4.8s ease-in-out 0.82s infinite;
+  animation: lockout-copy-loop 5.8s ease-in-out 0.82s infinite;
   text-shadow: 0 10px 34px color-mix(in oklab, var(--background) 48%, transparent);
   font-variation-settings: "wght" 540;
 }
 
-.lockout-copy::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  z-index: 21;
-  color: var(--destructive-foreground);
-  transform: translate3d(7px, 2px, 0) scaleX(1.045) scaleY(1.035);
-  transform-origin: center;
-  filter: blur(1.15px) contrast(1.4);
-  opacity: 0.92;
-  mask-image:
-    radial-gradient(ellipse 18px 31px at center, black 35%, transparent 72%),
-    radial-gradient(ellipse 27px 42px at center, black 32%, transparent 71%),
-    radial-gradient(ellipse 23px 38px at center, black 34%, transparent 73%),
-    radial-gradient(ellipse 31px 48px at center, black 30%, transparent 70%),
-    radial-gradient(ellipse 20px 35px at center, black 33%, transparent 72%);
-  mask-repeat: no-repeat;
-  animation: rain-refraction 7.8s linear -4.2s infinite;
-  pointer-events: none;
-}
-
 .lockout-cross {
   z-index: 2;
-  animation: lockout-slam 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation:
+    lockout-slam 0.72s cubic-bezier(0.16, 1, 0.3, 1) both,
+    cross-float 4.8s ease-in-out 0.72s infinite;
+  will-change: transform;
 }
 
 .lockout-stroke {
@@ -702,8 +685,9 @@
   transform-origin: center;
   border-radius: 55% 40% 48% 45%;
   background: var(--destructive-foreground);
-  box-shadow: 0 0 24px color-mix(in oklab, var(--destructive-foreground) 44%, transparent);
-  animation: marker-draw 0.26s ease-out 0.2s both;
+  background: color-mix(in oklab, var(--destructive-foreground) 88%, var(--destructive));
+  box-shadow: 0 3px 10px color-mix(in oklab, var(--background) 24%, transparent);
+  animation: marker-draw 0.38s cubic-bezier(0.2, 0.8, 0.25, 1) 0.2s both;
 }
 
 .lockout-stroke-two {
