@@ -46,8 +46,20 @@ class DiaryAudio {
   private nextBeat = 0;
   private step = 0;
   private musicPlaying = false;
-  private muted = false;
+  private musicVolume = 0.62;
+  private musicMuted = false;
   private visibilityBound = false;
+
+  constructor() {
+    if (typeof window === "undefined") return;
+    try {
+      const saved = window.localStorage.getItem("liam-diary-jazz-volume");
+      if (saved !== null) this.musicVolume = Math.min(1, Math.max(0, Number(saved)));
+      this.musicMuted = this.musicVolume === 0;
+    } catch {
+      this.musicVolume = 0.62;
+    }
+  }
 
   init() {
     if (typeof window === "undefined") return false;
@@ -58,9 +70,9 @@ class DiaryAudio {
       this.effects = this.context.createGain();
       this.music = this.context.createGain();
       const compressor = this.context.createDynamicsCompressor();
-      this.master.gain.value = this.muted ? 0 : 0.72;
+      this.master.gain.value = 0.72;
       this.effects.gain.value = 0.7;
-      this.music.gain.value = 0.1;
+      this.music.gain.value = this.musicMuted ? 0 : this.musicVolume * 0.16;
       this.effects.connect(this.master);
       this.music.connect(this.master);
       this.master.connect(compressor);
@@ -77,7 +89,7 @@ class DiaryAudio {
   private onVisibilityChange = () => {
     if (!this.context) return;
     if (document.hidden) void this.context.suspend();
-    else if (this.musicPlaying && !this.muted) void this.context.resume();
+    else if (this.musicPlaying) void this.context.resume();
   };
 
   private tone(
@@ -249,14 +261,42 @@ class DiaryAudio {
     }
   }
 
-  toggleMute() {
+  getMusicVolume() {
+    return this.musicMuted ? 0 : this.musicVolume;
+  }
+
+  setMusicVolume(value: number) {
     this.init();
-    this.muted = !this.muted;
-    if (this.master && this.context) {
-      this.master.gain.setTargetAtTime(this.muted ? 0 : 0.72, this.context.currentTime, 0.035);
+    const next = Math.min(1, Math.max(0, value));
+    this.musicVolume = next;
+    this.musicMuted = next === 0;
+    if (this.music && this.context) {
+      this.music.gain.setTargetAtTime(next * 0.16, this.context.currentTime, 0.045);
     }
-    if (!this.muted) this.play("mute");
-    return this.muted;
+    try {
+      window.localStorage.setItem("liam-diary-jazz-volume", String(next));
+    } catch {
+      // Audio still works when storage is unavailable.
+    }
+    return next;
+  }
+
+  toggleMusicMute() {
+    const nextMuted = !this.musicMuted;
+    this.musicMuted = nextMuted;
+    if (!nextMuted && this.musicVolume === 0) this.musicVolume = 0.62;
+    if (this.music && this.context) {
+      this.music.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.16, this.context.currentTime, 0.045);
+    }
+    if (!nextMuted) this.play("mute");
+    if (!nextMuted) {
+      try {
+        window.localStorage.setItem("liam-diary-jazz-volume", String(this.musicVolume));
+      } catch {
+        // Audio still works when storage is unavailable.
+      }
+    }
+    return nextMuted;
   }
 }
 

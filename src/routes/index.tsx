@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume1, Volume2, VolumeX } from "lucide-react";
 import { Entrance } from "@/components/diary/Entrance";
 import { VisitorCounter } from "@/components/diary/VisitorCounter";
 import { BlogFeed } from "@/components/diary/BlogFeed";
@@ -8,6 +8,7 @@ import { RelationshipGraph } from "@/components/diary/RelationshipGraph";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { diaryAudio } from "@/lib/diaryAudio";
+import { Slider } from "@/components/ui/slider";
 
 const TITLE = "Liam Vazquez — Private Diary";
 const DESCRIPTION =
@@ -35,7 +36,8 @@ function Index() {
   const [entered, setEntered] = useState(false);
   const [visits, setVisits] = useState(0);
   const [section, setSection] = useState<Section>("blog");
-  const [muted, setMuted] = useState(false);
+  const [musicVolume, setMusicVolume] = useState(() => diaryAudio.getMusicVolume());
+  const [musicMuted, setMusicMuted] = useState(musicVolume === 0);
 
   const handleEnter = () => {
     let next = 1;
@@ -53,7 +55,13 @@ function Index() {
   if (!entered) return <Entrance onEnter={handleEnter} />;
 
   return (
-    <main className="animate-veil-in grain min-h-dvh bg-background">
+    <main className="diary-shell animate-veil-in grain relative min-h-dvh overflow-hidden bg-background">
+      <div className="diary-ambient" aria-hidden="true">
+        <span className="diary-ambient-orbit" />
+        <span className="diary-ambient-line diary-ambient-line-one" />
+        <span className="diary-ambient-line diary-ambient-line-two" />
+        <span className="diary-ambient-index">LV · 0915 · PRIVATE RECORD · MIDORI</span>
+      </div>
       <header className="flex items-start justify-between gap-6 px-5 pt-6 md:px-10">
         <VisitorCounter count={visits} />
 
@@ -77,17 +85,36 @@ function Index() {
             </Button>
           ))}
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label={muted ? "Turn sound on" : "Mute sound"}
-            aria-pressed={muted}
-            onClick={() => setMuted(diaryAudio.toggleMute())}
-            className="h-8 w-8 rounded-none border border-border text-ash shadow-none hover:bg-accent hover:text-cream"
-          >
-            {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
-          </Button>
+          <div className="music-control flex h-8 items-center border border-border bg-background/70 backdrop-blur-sm">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={musicMuted ? "Turn jazz on" : "Mute jazz"}
+              aria-pressed={musicMuted}
+              onClick={() => {
+                const nextMuted = diaryAudio.toggleMusicMute();
+                setMusicMuted(nextMuted);
+                setMusicVolume(diaryAudio.getMusicVolume());
+              }}
+              className="h-7 w-7 rounded-none text-ash shadow-none hover:bg-accent hover:text-cream"
+            >
+              {musicMuted ? <VolumeX className="h-3.5 w-3.5" /> : musicVolume < 0.5 ? <Volume1 className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+            </Button>
+            <Slider
+              aria-label="Jazz volume"
+              min={0}
+              max={100}
+              step={1}
+              value={[musicMuted ? 0 : Math.round(musicVolume * 100)]}
+              onValueChange={(value) => {
+                const next = (value[0] ?? 0) / 100;
+                setMusicVolume(diaryAudio.setMusicVolume(next));
+                setMusicMuted(next === 0);
+              }}
+              className="mr-2 w-16 md:w-20"
+            />
+          </div>
         </nav>
       </header>
 

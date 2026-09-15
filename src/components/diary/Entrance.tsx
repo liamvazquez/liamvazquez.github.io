@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { diaryAudio } from "@/lib/diaryAudio";
 
-type Stage = "first" | "second" | "leaving" | "glitch" | "rejected";
+type Stage = "first" | "second" | "leaving" | "rejected";
 
 function GateButton({
   children,
@@ -21,11 +21,11 @@ function GateButton({
       variant="ghost"
       onClick={onClick}
       className={cn(
-        "h-auto min-w-[9rem] rounded-none px-10 py-3 text-xs font-normal uppercase tracking-editorial shadow-none transition-all duration-500 hover:bg-transparent",
+        "h-auto min-w-[9rem] rounded-none px-10 py-3 text-xs font-normal uppercase tracking-editorial shadow-none transition-[color,background-color,border-color,transform] duration-500 hover:bg-transparent",
         "border",
         tone === "cream"
           ? "border-cream/70 text-cream hover:bg-cream hover:text-ink"
-          : "border-cream/20 text-cream/55 hover:border-cream/60 hover:text-cream",
+          : "border-cream/25 bg-background/15 font-[family-name:var(--font-display)] text-sm text-cream/65 italic hover:-translate-y-0.5 hover:border-destructive/70 hover:bg-destructive/10 hover:text-cream",
       )}
     >
       {children}
@@ -48,6 +48,12 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
           <span style={{ "--slash-y": "71%", "--slash-width": "64%", "--slash-delay": "0.29s", "--slash-angle": "-9deg" } as React.CSSProperties} />
           <span style={{ "--slash-y": "88%", "--slash-width": "43%", "--slash-delay": "0.38s", "--slash-angle": "5deg" } as React.CSSProperties} />
         </div>
+        <div className="lockout-frame absolute inset-5 md:inset-9" aria-hidden="true" />
+        <div className="lockout-index absolute top-[16%] right-7 text-right font-mono text-[0.52rem] leading-loose tracking-editorial text-destructive-foreground/45 uppercase md:right-12">
+          <span className="block">Subject // LV-0915</span>
+          <span className="block">Clearance // denied</span>
+          <span className="block">Archive seal // broken</span>
+        </div>
         <span className="absolute top-7 left-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Access revoked // 00:00:00</span>
         <span className="absolute right-7 bottom-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Do not return</span>
         <div className="animate-cross-draw lockout-cross relative h-40 w-40 md:h-56 md:w-56">
@@ -61,6 +67,10 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
         >
           Then fuck off then.
         </p>
+        <p className="lockout-subcopy mt-5 max-w-md text-center text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">
+          You made your choice. The archive is closed.
+        </p>
+        <span className="lockout-code absolute bottom-7 left-7 font-mono text-[0.52rem] tracking-editorial text-destructive-foreground/45 uppercase">Error 403 // permanent</span>
         <div className="absolute top-[18%] left-0 h-px w-[42%] rotate-6 bg-destructive-foreground/30" />
         <div className="absolute right-0 bottom-[23%] h-px w-[48%] -rotate-12 bg-destructive-foreground/30" />
       </div>
@@ -71,7 +81,6 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
     <div
       className={cn(
         "entrance-scene grain fixed inset-0 z-40 overflow-hidden bg-background",
-        stage === "glitch" && "animate-glitch-out",
         stage === "leaving" && "animate-veil-out",
       )}
     >
@@ -142,14 +151,8 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
           <GateButton
             tone="ghost"
             onClick={() => {
-              if (stage === "second") {
-                diaryAudio.play("no");
-                setStage("first");
-                return;
-              }
               diaryAudio.play("denial");
-              setStage("glitch");
-              window.setTimeout(() => setStage("rejected"), 600);
+              setStage("rejected");
             }}
           >
             No
