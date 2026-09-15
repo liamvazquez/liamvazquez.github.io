@@ -2,69 +2,9 @@ import { useState } from "react";
 import liamAvatar from "@/assets/liam-avatar.png.asset.json";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { diaryAudio } from "@/lib/diaryAudio";
 
 type Stage = "first" | "second" | "leaving" | "glitch" | "rejected";
-
-function playDenialSound() {
-  try {
-    const context = new AudioContext();
-    const master = context.createGain();
-    const compressor = context.createDynamicsCompressor();
-    const now = context.currentTime;
-
-    master.gain.setValueAtTime(0.0001, now);
-    master.gain.exponentialRampToValueAtTime(0.42, now + 0.012);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.82);
-    master.connect(compressor);
-    compressor.connect(context.destination);
-
-    const impact = context.createOscillator();
-    const impactGain = context.createGain();
-    impact.type = "sawtooth";
-    impact.frequency.setValueAtTime(118, now);
-    impact.frequency.exponentialRampToValueAtTime(38, now + 0.3);
-    impactGain.gain.setValueAtTime(0.6, now);
-    impactGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
-    impact.connect(impactGain).connect(master);
-    impact.start(now);
-    impact.stop(now + 0.4);
-
-    [92, 111].forEach((frequency, index) => {
-      const buzzer = context.createOscillator();
-      const buzzerGain = context.createGain();
-      buzzer.type = index === 0 ? "square" : "sawtooth";
-      buzzer.frequency.setValueAtTime(frequency, now + 0.05);
-      buzzer.frequency.linearRampToValueAtTime(frequency * 1.9, now + 0.7);
-      buzzerGain.gain.setValueAtTime(0.0001, now);
-      buzzerGain.gain.exponentialRampToValueAtTime(0.16, now + 0.06);
-      buzzerGain.gain.setValueAtTime(0.13, now + 0.5);
-      buzzerGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
-      buzzer.connect(buzzerGain).connect(master);
-      buzzer.start(now);
-      buzzer.stop(now + 0.82);
-    });
-
-    const noiseBuffer = context.createBuffer(1, Math.floor(context.sampleRate * 0.5), context.sampleRate);
-    const channel = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < channel.length; i += 1) channel[i] = Math.random() * 2 - 1;
-    const noise = context.createBufferSource();
-    const noiseFilter = context.createBiquadFilter();
-    const noiseGain = context.createGain();
-    noise.buffer = noiseBuffer;
-    noiseFilter.type = "bandpass";
-    noiseFilter.frequency.setValueAtTime(1800, now);
-    noiseFilter.Q.setValueAtTime(0.7, now);
-    noiseGain.gain.setValueAtTime(0.24, now);
-    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.48);
-    noise.connect(noiseFilter).connect(noiseGain).connect(master);
-    noise.start(now);
-    noise.stop(now + 0.5);
-
-    window.setTimeout(() => void context.close(), 1100);
-  } catch {
-    // The visual rejection remains fully functional if browser audio is unavailable.
-  }
-}
 
 function GateButton({
   children,
@@ -101,6 +41,13 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
       <div className="lockout-scene grain fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-destructive px-6 select-none">
         <div className="lockout-scanlines absolute inset-0" />
         <div className="lockout-fracture absolute inset-0" aria-hidden="true" />
+        <div className="lockout-slashes absolute inset-0" aria-hidden="true">
+          <span style={{ "--slash-y": "14%", "--slash-width": "48%", "--slash-delay": "0.02s", "--slash-angle": "7deg" } as React.CSSProperties} />
+          <span style={{ "--slash-y": "31%", "--slash-width": "77%", "--slash-delay": "0.11s", "--slash-angle": "-4deg" } as React.CSSProperties} />
+          <span style={{ "--slash-y": "53%", "--slash-width": "35%", "--slash-delay": "0.21s", "--slash-angle": "12deg" } as React.CSSProperties} />
+          <span style={{ "--slash-y": "71%", "--slash-width": "64%", "--slash-delay": "0.29s", "--slash-angle": "-9deg" } as React.CSSProperties} />
+          <span style={{ "--slash-y": "88%", "--slash-width": "43%", "--slash-delay": "0.38s", "--slash-angle": "5deg" } as React.CSSProperties} />
+        </div>
         <span className="absolute top-7 left-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Access revoked // 00:00:00</span>
         <span className="absolute right-7 bottom-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Do not return</span>
         <div className="animate-cross-draw lockout-cross relative h-40 w-40 md:h-56 md:w-56">
@@ -134,6 +81,17 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
         className="absolute inset-y-0 right-[-12%] h-full w-[82%] scale-105 object-contain object-right opacity-50 brightness-[0.62] contrast-[1.12] saturate-[0.72] md:right-[2%] md:w-[62%]"
       />
       <div className="vignette absolute inset-0" />
+
+      {stage === "leaving" ? (
+        <div className="diary-entry-transition absolute inset-0 z-30" aria-hidden="true">
+          <span className="diary-entry-iris" />
+          <span className="diary-entry-ring diary-entry-ring-one" />
+          <span className="diary-entry-ring diary-entry-ring-two" />
+          <span className="diary-entry-sweep diary-entry-sweep-left" />
+          <span className="diary-entry-sweep diary-entry-sweep-right" />
+          <span className="diary-entry-mark">LV / 0915</span>
+        </div>
+      ) : null}
 
       <div className="pointer-events-none absolute inset-0 text-ash/50" aria-hidden="true">
         <div className="absolute top-8 left-7 border border-current px-4 py-3 text-[0.55rem] tracking-editorial uppercase md:top-12 md:left-12">
@@ -169,11 +127,14 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
           <GateButton
             onClick={() => {
               if (stage === "first") {
+                diaryAudio.play("yes");
                 setStage("second");
                 return;
               }
+              diaryAudio.play("yes");
+              diaryAudio.startJazz();
               setStage("leaving");
-              window.setTimeout(onEnter, 700);
+              window.setTimeout(onEnter, 1100);
             }}
           >
             Yes
@@ -182,10 +143,11 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
             tone="ghost"
             onClick={() => {
               if (stage === "second") {
+                diaryAudio.play("no");
                 setStage("first");
                 return;
               }
-              playDenialSound();
+              diaryAudio.play("denial");
               setStage("glitch");
               window.setTimeout(() => setStage("rejected"), 600);
             }}

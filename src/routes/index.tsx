@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 import { Entrance } from "@/components/diary/Entrance";
 import { VisitorCounter } from "@/components/diary/VisitorCounter";
 import { BlogFeed } from "@/components/diary/BlogFeed";
 import { RelationshipGraph } from "@/components/diary/RelationshipGraph";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { diaryAudio } from "@/lib/diaryAudio";
 
 const TITLE = "Liam Vazquez — Private Diary";
 const DESCRIPTION =
@@ -32,6 +35,7 @@ function Index() {
   const [entered, setEntered] = useState(false);
   const [visits, setVisits] = useState(0);
   const [section, setSection] = useState<Section>("blog");
+  const [muted, setMuted] = useState(false);
 
   const handleEnter = () => {
     let next = 1;
@@ -53,19 +57,37 @@ function Index() {
       <header className="flex items-start justify-between gap-6 px-5 pt-6 md:px-10">
         <VisitorCounter count={visits} />
 
-        <nav className="flex flex-col items-end gap-1 pt-1">
+        <nav className="flex items-start gap-4 pt-1">
+          <div className="flex flex-col items-end gap-1">
           {(["blog", "relationships"] as const).map((key) => (
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               key={key}
-              onClick={() => setSection(key)}
+              onClick={() => {
+                diaryAudio.play("section");
+                setSection(key);
+              }}
               className={cn(
-                "text-[0.66rem] tracking-editorial uppercase transition-colors duration-300",
+                "h-auto rounded-none px-0 py-0 text-[0.66rem] font-normal tracking-editorial uppercase shadow-none hover:bg-transparent",
                 section === key ? "text-cream" : "text-ash/60 hover:text-cream/80",
               )}
             >
               <span className={cn(section === key && "border-b border-cream pb-1")}>{key}</span>
-            </button>
+            </Button>
           ))}
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={muted ? "Turn sound on" : "Mute sound"}
+            aria-pressed={muted}
+            onClick={() => setMuted(diaryAudio.toggleMute())}
+            className="h-8 w-8 rounded-none border border-border text-ash shadow-none hover:bg-accent hover:text-cream"
+          >
+            {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+          </Button>
         </nav>
       </header>
 
