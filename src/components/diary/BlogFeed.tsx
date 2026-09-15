@@ -5,25 +5,45 @@ import { diaryPosts } from "@/data/posts";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { diaryAudio } from "@/lib/diaryAudio";
+import { adjustPostLike, getPostLikes } from "@/lib/likes.functions";
 
 const FAVORITES_KEY = "liam-diary-favorites";
+const SESSION_LIKES_KEY = "liam-diary-session-likes";
 
 type FeedFilter = "all" | "favorites";
+
+function readStored(storage: Storage | undefined, key: string): Set<string> {
+  try {
+    const saved = JSON.parse(storage?.getItem(key) ?? "[]");
+    if (Array.isArray(saved)) return new Set(saved.filter((id): id is string => typeof id === "string"));
+  } catch {
+    // Ignore unreadable browser storage.
+  }
+  return new Set();
+}
+
+function persist(storage: Storage | undefined, key: string, value: Set<string>) {
+  try {
+    storage?.setItem(key, JSON.stringify([...value]));
+  } catch {
+    // Saving is best-effort when browser storage is unavailable.
+  }
+}
 
 export function BlogFeed() {
   const [filter, setFilter] = useState<FeedFilter>("all");
   const [liked, setLiked] = useState<Set<string>>(() => new Set());
+  const [likeTotals, setLikeTotals] = useState<Record<string, number>>({});
   const [favorites, setFavorites] = useState<Set<string>>(() => new Set());
   const [notice, setNotice] = useState<string | null>(null);
   const noticeTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    try {
-      const saved = JSON.parse(window.localStorage.getItem(FAVORITES_KEY) ?? "[]");
-      if (Array.isArray(saved)) setFavorites(new Set(saved.filter((id): id is string => typeof id === "string")));
-    } catch {
-      setFavorites(new Set());
-    }
+    setFavorites(readStored(window.localStorage, FAVORITES_KEY));
+    setLiked(readStored(window.sessionStorage, SESSION_LIKES_KEY));
+    getPostLikes()
+      .then(setLikeTotals)
+      .catch(() => setLikeTotals({}));
   }, []);
 
   useEffect(() => () => {
@@ -31,13 +51,30 @@ export function BlogFeed() {
   }, []);
 
   const toggleLike = (id: string) => {
-    diaryAudio.play(liked.has(id) ? "unlike" : "like");
-    setLiked((current) => {
-      const next = new Set(current);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    const isLiked = liked.has(id);
+    const delta: 1 | -1 = isLiked ? -1 : 1;
+    diaryAudio.play(isLiked ? "unlike" : "like");
+
+    const nextLiked = new Set(liked);
+    if (isLiked) nextLiked.delete(id);
+    else nextLiked.add(id);
+    setLiked(nextLiked);
+    persist(window.sessionStorage, SESSION_LIKES_KEY, nextLiked);
+
+    setLikeTotals((current) => ({ ...current, [id]: Math.max((current[id] ?? 0) + delta, 0) }));
+
+    adjustPostLike({ data: { postId: id, delta } })
+      .then((total) => setLikeTotals((current) => ({ ...current, [id]: total })))
+      .catch(() => {
+        setLikeTotals((current) => ({ ...current, [id]: Math.max((current[id] ?? 0) - delta, 0) }));
+        setLiked((current) => {
+          const reverted = new Set(current);
+          if (isLiked) reverted.add(id);
+          else reverted.delete(id);
+          persist(window.sessionStorage, SESSION_LIKES_KEY, reverted);
+          return reverted;
+        });
+      });
   };
 
   const toggleFavorite = (id: string) => {
@@ -184,7 +221,7 @@ export function BlogFeed() {
             </div>
 
             <p className="mt-3 text-xs tracking-[0.18em] text-cream uppercase">
-              {(post.likes + (liked.has(post.id) ? 1 : 0)).toLocaleString()} likes
+              {(likeTotals[post.id] ?? post.likes).toLocaleString()} likes
             </p>
 
             <p className="mt-4 text-sm leading-[1.9] whitespace-pre-line text-cream/85">
