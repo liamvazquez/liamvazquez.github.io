@@ -14,7 +14,8 @@ export type DiarySound =
   | "zoom-in"
   | "zoom-out"
   | "recenter"
-  | "mute";
+  | "mute"
+  | "pen";
 
 const NOTES = {
   c2: 65.41,
@@ -218,6 +219,14 @@ class DiaryAudio {
         break;
       case "mute":
         this.tone(NOTES.g3, t, 0.1, 0.045, "sine");
+        break;
+      case "pen":
+        for (let index = 0; index < 15; index += 1) {
+          const offset = index * 0.09 + Math.random() * 0.025;
+          this.noise(t + offset, 0.07 + Math.random() * 0.055, 0.026 + Math.random() * 0.018, 2200 + Math.random() * 1700);
+        }
+        this.noise(t + 1.34, 0.5, 0.035, 1550);
+        this.noise(t + 1.78, 0.12, 0.04, 2900);
         break;
     }
   }

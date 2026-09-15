@@ -18,3 +18,6 @@
 - [x] Verify revised visuals and interactions on desktop and mobile
 - [x] Add denial screenshake and delayed hand-drawn signature conclusion
 - [x] Verify the signature sequence on desktop and mobile
+- [x] Preserve “Then fuck off then!” and refine only the existing red lockout scene
+- [x] Add synchronized analog pen-scribble audio to the signature
+- [x] Verify the refined lockout scene on desktop and mobile
