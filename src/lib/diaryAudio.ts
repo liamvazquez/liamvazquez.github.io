@@ -245,7 +245,7 @@ class DiaryAudio {
     for (let index = 0; index < channel.length; index += 1) {
       const white = Math.random() * 2 - 1;
       brown = (brown + 0.018 * white) / 1.018;
-      channel[index] = white * 0.62 + brown * 1.6;
+      channel[index] = white * 0.16 + brown * 4.2;
     }
 
     const source = context.createBufferSource();
@@ -257,15 +257,15 @@ class DiaryAudio {
     source.buffer = buffer;
     source.loop = true;
     lowpass.type = "lowpass";
-    lowpass.frequency.value = 5200;
-    lowpass.Q.value = 0.45;
+    lowpass.frequency.value = 1850;
+    lowpass.Q.value = 0.35;
     highpass.type = "highpass";
-    highpass.frequency.value = 420;
+    highpass.frequency.value = 120;
     gain.gain.setValueAtTime(0.0001, context.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.12, context.currentTime + 0.9);
+    gain.gain.exponentialRampToValueAtTime(0.052, context.currentTime + 1.8);
     lfo.type = "sine";
     lfo.frequency.value = 0.11;
-    lfoDepth.gain.value = 0.018;
+    lfoDepth.gain.value = 0.008;
     lfo.connect(lfoDepth).connect(gain.gain);
     source.connect(highpass).connect(lowpass).connect(gain).connect(this.effects);
     source.start();
@@ -274,13 +274,13 @@ class DiaryAudio {
     const scheduleDrops = () => {
       if (!this.context || !this.denialRainPlaying) return;
       const now = this.context.currentTime + 0.015;
-      for (let index = 0; index < 5; index += 1) {
-        const offset = Math.random() * 0.82;
-        this.noise(now + offset, 0.025 + Math.random() * 0.055, 0.018 + Math.random() * 0.026, 2800 + Math.random() * 3600);
+      for (let index = 0; index < 3; index += 1) {
+        const offset = Math.random() * 1.25;
+        this.noise(now + offset, 0.08 + Math.random() * 0.12, 0.006 + Math.random() * 0.007, 850 + Math.random() * 950);
       }
     };
     scheduleDrops();
-    this.denialRainTimer = window.setInterval(scheduleDrops, 760);
+    this.denialRainTimer = window.setInterval(scheduleDrops, 1200);
   }
 
   startJazz() {

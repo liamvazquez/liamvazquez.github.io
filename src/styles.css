@@ -335,9 +335,17 @@
   }
 }
 
-@keyframes denial-rain-fall {
-  from { transform: translate3d(0, -42%, 0); }
-  to { transform: translate3d(-7%, 42%, 0); }
+@keyframes windshield-drop {
+  0% { opacity: 0; transform: translate3d(0, -10vh, 0) scale(0.7); }
+  8% { opacity: 0.72; }
+  24% { transform: translate3d(-2px, 8vh, 0) scale(1); }
+  66% { opacity: 0.58; transform: translate3d(3px, 52vh, 0) scaleX(0.84) scaleY(1.35); }
+  100% { opacity: 0; transform: translate3d(-1px, 112vh, 0) scaleX(0.7) scaleY(1.8); }
+}
+
+@keyframes window-rain-haze {
+  0%, 100% { opacity: 0.09; transform: translateX(-1%); }
+  50% { opacity: 0.16; transform: translateX(1%); }
 }
 
 @keyframes rain-note-write {
@@ -459,33 +467,62 @@
 }
 
 .lockout-rain {
-  z-index: 1;
+  z-index: 4;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.3;
-  mix-blend-mode: screen;
 }
 
-.lockout-rain-sheet {
+.lockout-rain-haze {
   position: absolute;
-  inset: -55% -20%;
-  background-image: repeating-linear-gradient(101deg, transparent 0 17px, color-mix(in oklab, var(--destructive-foreground) 32%, transparent) 18px 19px, transparent 20px 38px);
-  animation: denial-rain-fall 0.72s linear infinite;
+  inset: 0;
+  background: repeating-linear-gradient(104deg, transparent 0 43px, color-mix(in oklab, var(--destructive-foreground) 9%, transparent) 44px, transparent 46px 91px);
+  animation: window-rain-haze 8s ease-in-out infinite;
 }
 
-.lockout-rain-sheet-two {
-  opacity: 0.5;
-  background-size: 59px 71px;
-  animation-duration: 1.05s;
-  animation-delay: -0.48s;
+.lockout-raindrop {
+  position: absolute;
+  top: -12vh;
+  left: var(--drop-left);
+  width: var(--drop-size);
+  height: calc(var(--drop-size) * 1.45);
+  border: 1px solid color-mix(in oklab, var(--destructive-foreground) 30%, transparent);
+  border-radius: 58% 42% 62% 38% / 42% 46% 54% 58%;
+  background: linear-gradient(145deg, color-mix(in oklab, var(--destructive-foreground) 20%, transparent), color-mix(in oklab, var(--background) 16%, transparent));
+  box-shadow: inset 2px 2px 4px color-mix(in oklab, var(--destructive-foreground) 22%, transparent), 0 2px 4px color-mix(in oklab, var(--background) 18%, transparent);
+  backdrop-filter: blur(3.5px) saturate(0.7);
+  animation: windshield-drop var(--drop-speed) cubic-bezier(0.42, 0, 0.58, 1) var(--drop-delay) infinite;
 }
 
-.lockout-rain-sheet-three {
-  opacity: 0.28;
-  background-size: 83px 96px;
-  animation-duration: 1.38s;
-  animation-delay: -0.9s;
+.lockout-raindrop::after {
+  content: "";
+  position: absolute;
+  top: 72%;
+  left: 35%;
+  width: 28%;
+  height: clamp(26px, 7vh, 74px);
+  border-radius: 999px;
+  background: linear-gradient(to bottom, color-mix(in oklab, var(--destructive-foreground) 18%, transparent), transparent);
+  filter: blur(1px);
 }
+
+.lockout-raindrop-1 { --drop-left: 5%; --drop-size: 18px; --drop-speed: 7.2s; --drop-delay: -2.1s; }
+.lockout-raindrop-2 { --drop-left: 12%; --drop-size: 9px; --drop-speed: 5.8s; --drop-delay: -4.7s; }
+.lockout-raindrop-3 { --drop-left: 19%; --drop-size: 14px; --drop-speed: 8.4s; --drop-delay: -1.2s; }
+.lockout-raindrop-4 { --drop-left: 27%; --drop-size: 22px; --drop-speed: 9.1s; --drop-delay: -7.8s; }
+.lockout-raindrop-5 { --drop-left: 34%; --drop-size: 8px; --drop-speed: 5.3s; --drop-delay: -3.6s; }
+.lockout-raindrop-6 { --drop-left: 41%; --drop-size: 16px; --drop-speed: 7.7s; --drop-delay: -6.2s; }
+.lockout-raindrop-7 { --drop-left: 48%; --drop-size: 11px; --drop-speed: 6.4s; --drop-delay: -0.8s; }
+.lockout-raindrop-8 { --drop-left: 54%; --drop-size: 25px; --drop-speed: 10.2s; --drop-delay: -8.4s; }
+.lockout-raindrop-9 { --drop-left: 61%; --drop-size: 10px; --drop-speed: 5.9s; --drop-delay: -2.9s; }
+.lockout-raindrop-10 { --drop-left: 67%; --drop-size: 18px; --drop-speed: 8.1s; --drop-delay: -5.4s; }
+.lockout-raindrop-11 { --drop-left: 73%; --drop-size: 7px; --drop-speed: 5.1s; --drop-delay: -1.7s; }
+.lockout-raindrop-12 { --drop-left: 79%; --drop-size: 21px; --drop-speed: 9.4s; --drop-delay: -6.9s; }
+.lockout-raindrop-13 { --drop-left: 85%; --drop-size: 12px; --drop-speed: 6.8s; --drop-delay: -3.1s; }
+.lockout-raindrop-14 { --drop-left: 91%; --drop-size: 17px; --drop-speed: 7.4s; --drop-delay: -5.9s; }
+.lockout-raindrop-15 { --drop-left: 23%; --drop-size: 7px; --drop-speed: 5.6s; --drop-delay: -0.2s; }
+.lockout-raindrop-16 { --drop-left: 58%; --drop-size: 13px; --drop-speed: 8.8s; --drop-delay: -4.2s; }
+.lockout-raindrop-17 { --drop-left: 76%; --drop-size: 8px; --drop-speed: 6.1s; --drop-delay: -2.5s; }
+.lockout-raindrop-18 { --drop-left: 96%; --drop-size: 11px; --drop-speed: 7.9s; --drop-delay: -7.1s; }
 
 .lockout-margin {
   position: absolute;
@@ -616,8 +653,12 @@
   z-index: 3;
   opacity: 0;
   line-height: 1.15;
+  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  font-weight: 400;
+  letter-spacing: 0.02em;
   animation: rain-note-write 1.15s steps(16, end) 3.75s forwards;
-  text-shadow: 0 4px 14px color-mix(in oklab, var(--background) 42%, transparent);
+  filter: opacity(0.48);
+  text-shadow: 0 3px 10px color-mix(in oklab, var(--background) 30%, transparent);
 }
 
 .diary-shell > header,
@@ -881,7 +922,8 @@
   .lockout-signature-stroke,
   .lockout-sincerely,
   .lockout-window-shadow,
-  .lockout-rain-sheet,
+  .lockout-rain-haze,
+  .lockout-raindrop,
   .lockout-rain-note,
   .lockout-ink,
   .diary-entry-iris,

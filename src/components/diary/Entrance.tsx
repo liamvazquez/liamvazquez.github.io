@@ -49,9 +49,10 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
         <div className="lockout-shadow absolute inset-0" aria-hidden="true" />
         <div className="lockout-window-shadow absolute inset-0" aria-hidden="true" />
         <div className="lockout-rain absolute inset-0" aria-hidden="true">
-          <span className="lockout-rain-sheet lockout-rain-sheet-one" />
-          <span className="lockout-rain-sheet lockout-rain-sheet-two" />
-          <span className="lockout-rain-sheet lockout-rain-sheet-three" />
+          <span className="lockout-rain-haze" />
+          {Array.from({ length: 18 }, (_, index) => (
+            <span key={index} className={`lockout-raindrop lockout-raindrop-${index + 1}`} />
+          ))}
         </div>
         <span className="lockout-margin" aria-hidden="true" />
         <span className="lockout-hole lockout-hole-one" aria-hidden="true" />
@@ -85,7 +86,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
             Sincerely, Vaz.
           </p>
         </div>
-        <p className="lockout-rain-note absolute right-5 bottom-5 max-w-[15rem] text-right font-[family-name:var(--font-display)] text-sm text-destructive-foreground/80 italic md:right-10 md:bottom-8 md:max-w-sm md:text-lg">
+        <p className="lockout-rain-note absolute right-5 bottom-5 max-w-[15rem] text-right text-sm text-destructive-foreground italic md:right-10 md:bottom-8 md:max-w-sm md:text-lg">
           PS : Enjoy the rain noise while you&apos;re fucked off 🤤
         </p>
       </div>
