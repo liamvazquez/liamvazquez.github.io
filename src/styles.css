@@ -1496,3 +1496,73 @@
   .feed-scribble,
   .feed-clip { animation: none; }
 }
+
+/* ============ POST FRAME ============ */
+.post-frame {
+  position: relative;
+  padding: clamp(1.1rem, 2.6vw, 1.9rem);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--card) 55%, transparent), transparent 42%),
+    color-mix(in oklab, var(--card) 30%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--ink) 60%, transparent),
+    0 18px 40px -28px rgb(0 0 0 / 0.85);
+}
+.post-frame::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid color-mix(in oklab, var(--cream) 14%, transparent);
+  pointer-events: none;
+}
+.post-frame::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-left: 1px dashed color-mix(in oklab, var(--cream) 9%, transparent);
+  pointer-events: none;
+}
+
+.post-corner {
+  position: absolute;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-color: color-mix(in oklab, var(--cream) 62%, transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+.post-corner-tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+.post-corner-tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+.post-corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+.post-corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+
+.post-corner::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--cream) 45%, transparent);
+}
+.post-corner-tl::after { top: 5px; left: 5px; }
+.post-corner-tr::after { top: 5px; right: 5px; }
+.post-corner-bl::after { bottom: 5px; left: 5px; }
+.post-corner-br::after { bottom: 5px; right: 5px; }
+
+.post-tape {
+  position: absolute;
+  top: -0.55rem;
+  width: 3.4rem;
+  height: 1.05rem;
+  background: color-mix(in oklab, var(--cream) 16%, transparent);
+  border-left: 1px solid color-mix(in oklab, var(--cream) 18%, transparent);
+  border-right: 1px solid color-mix(in oklab, var(--cream) 18%, transparent);
+  transform: rotate(-4deg);
+  pointer-events: none;
+  z-index: 3;
+  backdrop-filter: blur(0.5px);
+}
+.post-tape-right { right: 12%; transform: rotate(3.5deg); }
+.post-tape-left { left: 12%; }
+

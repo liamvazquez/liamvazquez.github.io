@@ -184,7 +184,14 @@ export function BlogFeed() {
             className="animate-soft-rise"
             style={{ animationDelay: `${0.1 + i * 0.1}s` }}
           >
-            <div className="flex items-center gap-3">
+            <div className="post-frame">
+              <span className="post-corner post-corner-tl" aria-hidden="true" />
+              <span className="post-corner post-corner-tr" aria-hidden="true" />
+              <span className="post-corner post-corner-bl" aria-hidden="true" />
+              <span className="post-corner post-corner-br" aria-hidden="true" />
+              <span className="post-tape post-tape-left" aria-hidden="true" />
+              <span className="post-tape post-tape-right" aria-hidden="true" />
+              <div className="flex items-center gap-3">
               <img
                 src={liamAvatar}
                 alt=""
@@ -263,6 +270,7 @@ export function BlogFeed() {
                 ? "No comments"
                 : `${post.comments} comment${post.comments === 1 ? "" : "s"}`}
             </p>
+            </div>
           </article>
         ))}
       </div>
