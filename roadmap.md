@@ -6,3 +6,8 @@
 - [x] Add visitor-count explanation and moving blog backdrop
 - [x] Simplify and expand relationship legend
 - [x] Verify desktop and mobile interactions
+- [ ] Route either No choice directly to the denial screen
+- [ ] Refine the No button and denial-screen details
+- [ ] Add subtle motion across the full diary
+- [ ] Add persistent jazz volume controls
+- [ ] Verify the revised flow on desktop and mobile
