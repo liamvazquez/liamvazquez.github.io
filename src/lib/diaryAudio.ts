@@ -1,3 +1,6 @@
+const MUSIC_GAIN = 0.48;
+const HORROR_GAIN = 0.3;
+
 export type DiarySound =
   | "yes"
   | "no"
