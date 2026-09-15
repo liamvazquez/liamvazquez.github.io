@@ -410,6 +410,56 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes backstory-tab-twitch {
+  0%, 84%, 100% { transform: translate(0); filter: none; opacity: 0.72; }
+  85% { transform: translate(-3px, 1px) skewX(8deg); filter: contrast(1.8); opacity: 1; }
+  86% { transform: translate(4px, -1px) skewX(-10deg); }
+  87% { transform: translate(-1px, 0); filter: invert(0.12); }
+  91% { transform: translate(0); filter: none; }
+  96% { transform: translate(2px, 0) scaleX(1.08); }
+  97% { transform: translate(-2px, 1px) scaleX(0.94); }
+}
+
+@keyframes backstory-frame-slip {
+  0%, 76%, 100% { transform: translate3d(0, 0, 0); filter: none; }
+  77% { transform: translate3d(-9px, 2px, 0); filter: contrast(1.8) brightness(1.35); }
+  78% { transform: translate3d(12px, -1px, 0); }
+  79% { transform: translate3d(-3px, 0, 0); }
+  93% { transform: translate3d(0, 0, 0); filter: none; }
+  94% { transform: translate3d(2px, -3px, 0) skewX(0.8deg); }
+}
+
+@keyframes backstory-message-corrupt {
+  0%, 70%, 100% { transform: translate3d(0, 0, 0); filter: blur(0); opacity: 0.92; }
+  71% { transform: translate3d(-7px, 1px, 0) skewX(5deg); filter: blur(0.4px); }
+  72% { transform: translate3d(8px, -2px, 0) skewX(-4deg); opacity: 0.68; }
+  73% { transform: translate3d(-2px, 0, 0); filter: blur(1px); }
+  89% { transform: translate3d(0, 0, 0); opacity: 0.92; }
+  90% { transform: scaleY(0.94); filter: contrast(2); }
+  91% { transform: scaleY(1.02); }
+}
+
+@keyframes backstory-ghost-one {
+  0%, 68%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); opacity: 0; }
+  69% { clip-path: inset(18% 0 55% 0); transform: translate(-12px, 1px); opacity: 0.45; }
+  71% { clip-path: inset(62% 0 17% 0); transform: translate(9px, -1px); opacity: 0.3; }
+  72% { opacity: 0; }
+}
+
+@keyframes backstory-scan {
+  from { transform: translateY(-120%); }
+  to { transform: translateY(120%); }
+}
+
+@keyframes backstory-noise {
+  0% { background-position: 0 0; opacity: 0.12; }
+  20% { background-position: -37px 21px; opacity: 0.2; }
+  40% { background-position: 12px -44px; opacity: 0.1; }
+  60% { background-position: 53px 8px; opacity: 0.24; }
+  80% { background-position: -18px 39px; opacity: 0.14; }
+  100% { background-position: 31px -17px; opacity: 0.18; }
+}
+
 @utility animate-glitch-out {
   animation: glitch-shift 0.62s steps(2, end) forwards;
 }
@@ -812,6 +862,100 @@
   border-radius: 0;
 }
 
+.backstory-tab {
+  position: relative;
+  animation: backstory-tab-twitch 2.7s steps(1, end) infinite;
+  text-shadow: -1px 0 color-mix(in oklab, var(--destructive) 65%, transparent), 1px 0 color-mix(in oklab, var(--cream) 28%, transparent);
+}
+
+.backstory-tab::before,
+.backstory-tab::after {
+  content: "BACKSTORY";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.backstory-tab::before { transform: translateX(-2px); clip-path: inset(10% 0 58% 0); color: var(--destructive); }
+.backstory-tab::after { transform: translateX(2px); clip-path: inset(64% 0 8% 0); color: var(--cream); }
+.backstory-tab:hover::before,
+.backstory-tab:hover::after,
+.backstory-tab-active::before,
+.backstory-tab-active::after { opacity: 0.7; }
+
+.backstory-active {
+  background: oklch(0.045 0.008 25);
+}
+
+.backstory-active .diary-ambient {
+  opacity: 0.08;
+  filter: grayscale(1) contrast(2.4);
+  transition: opacity 2s ease, filter 2s ease;
+}
+
+.backstory-scene {
+  background:
+    radial-gradient(ellipse at center, transparent 0 18%, color-mix(in oklab, var(--background) 72%, transparent) 72%),
+    oklch(0.045 0.008 25);
+  animation: backstory-frame-slip 3.8s steps(1, end) infinite;
+}
+
+.backstory-blackout {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, color-mix(in oklab, var(--cream) 3%, transparent) 3px 4px);
+  box-shadow: inset 0 0 12rem 4rem var(--background);
+}
+
+.backstory-tape-noise {
+  position: absolute;
+  inset: -20%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  mix-blend-mode: screen;
+  animation: backstory-noise 0.18s steps(2, end) infinite;
+}
+
+.backstory-tracking {
+  position: absolute;
+  left: -8%;
+  width: 116%;
+  height: 12%;
+  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--cream) 8%, transparent), transparent);
+  filter: blur(5px);
+  animation: backstory-scan 6.4s linear infinite;
+}
+
+.backstory-tracking-two { animation-delay: -3.1s; animation-duration: 8.7s; opacity: 0.55; }
+
+.backstory-frame-tear {
+  position: absolute;
+  inset: 12% 0 auto;
+  height: 1px;
+  background: color-mix(in oklab, var(--cream) 20%, transparent);
+  box-shadow: 0 22vh 0 color-mix(in oklab, var(--destructive) 10%, transparent), 0 51vh 0 color-mix(in oklab, var(--cream) 8%, transparent);
+}
+
+.backstory-message {
+  position: relative;
+  z-index: 3;
+  animation: backstory-message-corrupt 4.1s steps(1, end) infinite;
+  text-shadow: 0 0 24px color-mix(in oklab, var(--cream) 12%, transparent);
+}
+
+.backstory-message::before,
+.backstory-message::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: backstory-ghost-one 4.1s steps(1, end) infinite;
+}
+
+.backstory-message::before { color: color-mix(in oklab, var(--destructive) 72%, var(--cream)); }
+.backstory-message::after { color: color-mix(in oklab, var(--cream) 62%, transparent); animation-delay: -1.9s; }
+
 .diary-entry-transition {
   pointer-events: none;
   overflow: hidden;
@@ -1052,6 +1196,21 @@
   .diary-paper-shadow,
   .diary-dust {
     animation: none;
+  }
+
+  .backstory-tab,
+  .backstory-scene,
+  .backstory-message,
+  .backstory-message::before,
+  .backstory-message::after,
+  .backstory-tape-noise,
+  .backstory-tracking {
+    animation: none;
+  }
+
+  .backstory-message::before,
+  .backstory-message::after {
+    display: none;
   }
 
   .lockout-signature-stroke {

@@ -43,6 +43,7 @@ class DiaryAudio {
   private master: GainNode | null = null;
   private effects: GainNode | null = null;
   private music: GainNode | null = null;
+  private horror: GainNode | null = null;
   private timer: number | null = null;
   private nextBeat = 0;
   private step = 0;
@@ -52,6 +53,8 @@ class DiaryAudio {
   private denialRainTimer: number | null = null;
   private musicVolume = 0.62;
   private musicMuted = false;
+  private horrorPlaying = false;
+  private horrorSources: AudioScheduledSourceNode[] = [];
   private visibilityBound = false;
 
   constructor() {
@@ -73,12 +76,15 @@ class DiaryAudio {
       this.master = this.context.createGain();
       this.effects = this.context.createGain();
       this.music = this.context.createGain();
+      this.horror = this.context.createGain();
       const compressor = this.context.createDynamicsCompressor();
       this.master.gain.value = 0.72;
       this.effects.gain.value = 0.7;
       this.music.gain.value = this.musicMuted ? 0 : this.musicVolume * 0.16;
+      this.horror.gain.value = 0;
       this.effects.connect(this.master);
       this.music.connect(this.master);
+      this.horror.connect(this.master);
       this.master.connect(compressor);
       compressor.connect(this.context.destination);
     }
@@ -93,7 +99,7 @@ class DiaryAudio {
   private onVisibilityChange = () => {
     if (!this.context) return;
     if (document.hidden) void this.context.suspend();
-    else if (this.musicPlaying || this.denialRainPlaying) void this.context.resume();
+    else if (this.musicPlaying || this.denialRainPlaying || this.horrorPlaying) void this.context.resume();
   };
 
   private tone(
@@ -292,6 +298,73 @@ class DiaryAudio {
     this.timer = window.setInterval(() => this.scheduler(), 25);
   }
 
+  setHorrorMode(enabled: boolean) {
+    if (!this.init() || !this.context || !this.music || !this.horror) return;
+    const now = this.context.currentTime;
+    const target = this.musicMuted ? 0 : this.musicVolume;
+
+    if (enabled && !this.horrorPlaying) this.startHorrorTexture();
+
+    this.music.gain.cancelScheduledValues(now);
+    this.horror.gain.cancelScheduledValues(now);
+    this.music.gain.setValueAtTime(this.music.gain.value, now);
+    this.horror.gain.setValueAtTime(this.horror.gain.value, now);
+    this.music.gain.linearRampToValueAtTime(enabled ? 0 : target * 0.16, now + 2);
+    this.horror.gain.linearRampToValueAtTime(enabled ? target * 0.115 : 0, now + 2);
+  }
+
+  private startHorrorTexture() {
+    const context = this.context;
+    const destination = this.horror;
+    if (!context || !destination) return;
+    this.horrorPlaying = true;
+
+    const drone = context.createOscillator();
+    const uneasy = context.createOscillator();
+    const wobble = context.createOscillator();
+    const wobbleDepth = context.createGain();
+    const lowpass = context.createBiquadFilter();
+    drone.type = "sine";
+    drone.frequency.value = 43.65;
+    uneasy.type = "triangle";
+    uneasy.frequency.value = 65.8;
+    wobble.type = "sine";
+    wobble.frequency.value = 0.19;
+    wobbleDepth.gain.value = 2.4;
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = 620;
+    lowpass.Q.value = 2.8;
+    wobble.connect(wobbleDepth);
+    wobbleDepth.connect(uneasy.detune);
+    drone.connect(lowpass);
+    uneasy.connect(lowpass);
+    lowpass.connect(destination);
+    drone.start();
+    uneasy.start();
+    wobble.start();
+    this.horrorSources.push(drone, uneasy, wobble);
+
+    const duration = 3.7;
+    const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * duration), context.sampleRate);
+    const channel = buffer.getChannelData(0);
+    let previous = 0;
+    for (let index = 0; index < channel.length; index += 1) {
+      const white = Math.random() * 2 - 1;
+      previous = previous * 0.985 + white * 0.015;
+      channel[index] = previous * 0.7;
+    }
+    const tape = context.createBufferSource();
+    const tapeFilter = context.createBiquadFilter();
+    tape.buffer = buffer;
+    tape.loop = true;
+    tapeFilter.type = "bandpass";
+    tapeFilter.frequency.value = 1280;
+    tapeFilter.Q.value = 0.5;
+    tape.connect(tapeFilter).connect(destination);
+    tape.start();
+    this.horrorSources.push(tape);
+  }
+
   private scheduler() {
     const context = this.context;
     if (!context || !this.music || !this.musicPlaying) return;
@@ -333,7 +406,8 @@ class DiaryAudio {
     this.musicVolume = next;
     this.musicMuted = next === 0;
     if (this.music && this.context) {
-      this.music.gain.setTargetAtTime(next * 0.16, this.context.currentTime, 0.045);
+      this.music.gain.setTargetAtTime(this.horrorPlaying && this.horror?.gain.value > 0.001 ? 0 : next * 0.16, this.context.currentTime, 0.045);
+      if (this.horror) this.horror.gain.setTargetAtTime(this.horrorPlaying && this.horror.gain.value > 0.001 ? next * 0.115 : 0, this.context.currentTime, 0.045);
     }
     try {
       window.localStorage.setItem("liam-diary-jazz-volume", String(next));
@@ -349,6 +423,10 @@ class DiaryAudio {
     if (!nextMuted && this.musicVolume === 0) this.musicVolume = 0.62;
     if (this.music && this.context) {
       this.music.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.16, this.context.currentTime, 0.045);
+      if (this.horror && this.horrorPlaying && this.horror.gain.value > 0.001) {
+        this.music.gain.setTargetAtTime(0, this.context.currentTime, 0.045);
+        this.horror.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.115, this.context.currentTime, 0.045);
+      }
     }
     if (!nextMuted) this.play("mute");
     if (!nextMuted) {

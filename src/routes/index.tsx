@@ -5,6 +5,7 @@ import { Entrance } from "@/components/diary/Entrance";
 import { VisitorCounter } from "@/components/diary/VisitorCounter";
 import { BlogFeed } from "@/components/diary/BlogFeed";
 import { RelationshipGraph } from "@/components/diary/RelationshipGraph";
+import { Backstory } from "@/components/diary/Backstory";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { diaryAudio } from "@/lib/diaryAudio";
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/")({
 
 const STORAGE_KEY = "liam-diary-visits";
 
-type Section = "blog" | "relationships";
+type Section = "blog" | "relationships" | "backstory";
 
 function Index() {
   const [entered, setEntered] = useState(false);
@@ -55,7 +56,7 @@ function Index() {
   if (!entered) return <Entrance onEnter={handleEnter} />;
 
   return (
-    <main className="diary-shell animate-veil-in grain relative min-h-dvh overflow-hidden bg-background">
+    <main className={cn("diary-shell animate-veil-in grain relative min-h-dvh overflow-hidden bg-background", section === "backstory" && "backstory-active")}>
       <div className="diary-ambient" aria-hidden="true">
         <span className="diary-window-light" />
         <span className="diary-paper-shadow diary-paper-shadow-one" />
@@ -63,22 +64,25 @@ function Index() {
         <span className="diary-dust diary-dust-one" />
         <span className="diary-dust diary-dust-two" />
       </div>
-      <header className="flex items-start justify-between gap-6 px-5 pt-6 md:px-10">
+      <header className="relative z-30 flex items-start justify-between gap-6 px-5 pt-6 md:px-10">
         <VisitorCounter count={visits} />
 
         <nav className="flex items-start gap-4 pt-1">
           <div className="flex flex-col items-end gap-1">
-          {(["blog", "relationships"] as const).map((key) => (
+          {(["blog", "relationships", "backstory"] as const).map((key) => (
             <Button
               type="button"
               variant="ghost"
               key={key}
               onClick={() => {
                 diaryAudio.play("section");
+                diaryAudio.setHorrorMode(key === "backstory");
                 setSection(key);
               }}
               className={cn(
                 "h-auto rounded-none px-0 py-0 text-[0.66rem] font-normal tracking-editorial uppercase shadow-none hover:bg-transparent",
+                key === "backstory" && "backstory-tab",
+                key === "backstory" && section === "backstory" && "backstory-tab-active",
                 section === key ? "text-cream" : "text-ash/60 hover:text-cream/80",
               )}
             >
@@ -91,7 +95,7 @@ function Index() {
               type="button"
               variant="ghost"
               size="icon"
-              aria-label={musicMuted ? "Turn jazz on" : "Mute jazz"}
+              aria-label={musicMuted ? "Turn sound on" : "Mute sound"}
               aria-pressed={musicMuted}
               onClick={() => {
                 const nextMuted = diaryAudio.toggleMusicMute();
@@ -103,7 +107,7 @@ function Index() {
               {musicMuted ? <VolumeX className="h-3.5 w-3.5" /> : musicVolume < 0.5 ? <Volume1 className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
             </Button>
             <Slider
-              aria-label="Jazz volume"
+              aria-label="Atmosphere volume"
               min={0}
               max={100}
               step={1}
@@ -122,7 +126,7 @@ function Index() {
       <div className="px-2 pt-10 md:px-6">
         {section === "blog" ? (
           <BlogFeed />
-        ) : (
+        ) : section === "relationships" ? (
           <div className="animate-soft-rise">
             <div className="mx-auto max-w-[34rem] px-3">
               <h2 className="font-[family-name:var(--font-display)] text-5xl font-light text-cream italic">
@@ -134,6 +138,8 @@ function Index() {
             </div>
             <RelationshipGraph />
           </div>
+        ) : (
+          <Backstory />
         )}
       </div>
     </main>
