@@ -25,3 +25,5 @@
 - [x] Loop subtle analog motion through “Then fuck off then!”
 - [x] Replace denial white noise with continuous rain and visible rainfall
 - [x] Add Liam’s handwritten rain PS to the bottom-right
+- [x] Refine denial rain into soft windshield droplets with text distortion
+- [x] Mellow the rain audio and restyle the PS as faint handwriting
