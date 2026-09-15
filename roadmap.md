@@ -11,8 +11,8 @@
 - [x] Add subtle motion across the full diary
 - [x] Add persistent jazz volume controls
 - [x] Verify the revised flow on desktop and mobile
-- [ ] Rebuild denial as an analog school-diary jump scare with reload-only exit
-- [ ] Replace cybernetic ambience with natural classroom-inspired motion
-- [ ] Soften and deepen the denial sound
-- [ ] Add relationship photo enlargement
-- [ ] Verify revised visuals and interactions on desktop and mobile
+- [x] Rebuild denial as an analog school-diary jump scare with reload-only exit
+- [x] Replace cybernetic ambience with natural classroom-inspired motion
+- [x] Soften and deepen the denial sound
+- [x] Add relationship photo enlargement
+- [x] Verify revised visuals and interactions on desktop and mobile
