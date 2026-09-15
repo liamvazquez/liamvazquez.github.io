@@ -221,3 +221,9 @@
 @utility tracking-editorial {
   letter-spacing: 0.34em;
 }
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+}
