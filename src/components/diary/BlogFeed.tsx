@@ -5,6 +5,7 @@ import { diaryPosts } from "@/data/posts";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { diaryAudio } from "@/lib/diaryAudio";
+import { adjustPostLike, getPostLikes } from "@/lib/likes.functions";
 
 const FAVORITES_KEY = "liam-diary-favorites";
 const SESSION_LIKES_KEY = "liam-diary-session-likes";
