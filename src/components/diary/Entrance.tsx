@@ -149,11 +149,16 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
         </h1>
 
         <div
-          className="animate-soft-rise mt-14 flex flex-wrap items-center justify-center gap-5"
+          className={cn(
+            "animate-soft-rise mt-14 flex flex-wrap items-center justify-center gap-5 transition-opacity duration-500",
+            stage === "leaving" && "pointer-events-none opacity-0",
+          )}
           style={{ animationDelay: "0.2s" }}
+          aria-hidden={stage === "leaving"}
         >
           <GateButton
             onClick={() => {
+              if (stage === "leaving") return;
               if (stage === "first") {
                 diaryAudio.play("yes");
                 setStage("second");
@@ -170,8 +175,9 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
           <GateButton
             tone="ghost"
             onClick={() => {
+              if (stage === "leaving") return;
               diaryAudio.play("denial");
-               diaryAudio.startDenialRain();
+              diaryAudio.startDenialRain();
               setStage("rejected");
             }}
           >
