@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import liamAvatar from "@/assets/liam-avatar.png.asset.json";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -36,11 +36,23 @@ function GateButton({
 export function Entrance({ onEnter }: { onEnter: () => void }) {
   const [stage, setStage] = useState<Stage>("first");
 
+  useEffect(() => {
+    if (stage !== "rejected") return;
+    const penTimer = window.setTimeout(() => diaryAudio.play("pen"), 1420);
+    return () => window.clearTimeout(penTimer);
+  }, [stage]);
+
   if (stage === "rejected") {
     return (
       <div className="lockout-scene grain fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-destructive px-6 select-none">
         <div className="lockout-paper absolute inset-0" aria-hidden="true" />
         <div className="lockout-shadow absolute inset-0" aria-hidden="true" />
+        <div className="lockout-window-shadow absolute inset-0" aria-hidden="true" />
+        <span className="lockout-margin" aria-hidden="true" />
+        <span className="lockout-hole lockout-hole-one" aria-hidden="true" />
+        <span className="lockout-hole lockout-hole-two" aria-hidden="true" />
+        <span className="lockout-ink lockout-ink-one" aria-hidden="true" />
+        <span className="lockout-ink lockout-ink-two" aria-hidden="true" />
         <span className="lockout-pencil lockout-pencil-one" aria-hidden="true" />
         <span className="lockout-pencil lockout-pencil-two" aria-hidden="true" />
         <div className="lockout-cross relative h-40 w-40 md:h-56 md:w-56" aria-hidden="true">
@@ -50,7 +62,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
         <p
           className="lockout-copy mt-12 text-center font-[family-name:var(--font-display)] text-5xl font-semibold text-destructive-foreground italic md:text-7xl"
         >
-          Then fuck off then.
+          Then fuck off then!
         </p>
         <p className="lockout-subcopy mt-5 text-center font-[family-name:var(--font-display)] text-lg text-destructive-foreground/65 italic">
           Reload it yourself if you’re that desperate.
