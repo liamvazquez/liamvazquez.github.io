@@ -124,7 +124,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
       <div className="pointer-events-none absolute inset-0 text-ash/50" aria-hidden="true">
         <div className="absolute top-8 left-7 border border-current px-4 py-3 text-[0.55rem] tracking-editorial uppercase md:top-12 md:left-12">
           <span className="block text-cream/75">Midori High</span>
-          <span className="mt-1 block">Private archive · 09/15/26</span>
+          <span className="mt-1 block">Private archive</span>
         </div>
         <div className="absolute top-8 right-7 text-right font-[family-name:var(--font-display)] text-xl text-cream/35 md:top-12 md:right-12 md:text-3xl">
           緑高校<br /><span className="text-[0.55rem] font-sans tracking-editorial uppercase">Personal record</span>
