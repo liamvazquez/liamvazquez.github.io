@@ -21,3 +21,5 @@
 - [x] Preserve “Then fuck off then!” and refine only the existing red lockout scene
 - [x] Add synchronized analog pen-scribble audio to the signature
 - [x] Verify the refined lockout scene on desktop and mobile
+- [x] Add unsettling white-noise ambience to the denial scene
+- [x] Loop subtle analog motion through “Then fuck off then!”

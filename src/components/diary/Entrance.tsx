@@ -59,10 +59,8 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
           <span className="lockout-stroke lockout-stroke-one" />
           <span className="lockout-stroke lockout-stroke-two" />
         </div>
-        <p
-          className="lockout-copy mt-12 text-center font-[family-name:var(--font-display)] text-5xl font-semibold text-destructive-foreground italic md:text-7xl"
-        >
-          Then fuck off then!
+        <p className="lockout-copy-shell mt-12 text-center font-[family-name:var(--font-display)] text-5xl font-semibold text-destructive-foreground italic md:text-7xl">
+          <span className="lockout-copy">Then fuck off then!</span>
         </p>
         <p className="lockout-subcopy mt-5 text-center font-[family-name:var(--font-display)] text-lg text-destructive-foreground/65 italic">
           Reload it yourself if you’re that desperate.
@@ -161,6 +159,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
             tone="ghost"
             onClick={() => {
               diaryAudio.play("denial");
+               diaryAudio.startDenialAmbience();
               setStage("rejected");
             }}
           >

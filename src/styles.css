@@ -313,6 +313,28 @@
   50% { opacity: 0.3; transform: scale(1.08); }
 }
 
+@keyframes lockout-copy-loop {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(-0.4deg) scale(1);
+    text-shadow: 0 10px 34px color-mix(in oklab, var(--background) 48%, transparent);
+  }
+  19% {
+    transform: translate3d(-2px, 1px, 0) rotate(0.25deg) scaleX(1.015) scaleY(0.99);
+    text-shadow: -2px 9px 30px color-mix(in oklab, var(--background) 55%, transparent);
+  }
+  43% {
+    transform: translate3d(1px, -2px, 0) rotate(-0.15deg) scale(0.995);
+    text-shadow: 2px 13px 38px color-mix(in oklab, var(--background) 42%, transparent);
+  }
+  67% {
+    transform: translate3d(3px, 1px, 0) rotate(0.45deg) scaleX(0.99) scaleY(1.012);
+    text-shadow: -1px 7px 27px color-mix(in oklab, var(--background) 58%, transparent);
+  }
+  82% {
+    transform: translate3d(-1px, 2px, 0) rotate(-0.3deg) scale(1.008);
+  }
+}
+
 @keyframes scanline-roll {
   from { background-position: 0 0; }
   to { background-position: 0 12px; }
@@ -472,10 +494,15 @@
 .lockout-pencil-one { top: 22%; left: -8%; transform: rotate(8deg); }
 .lockout-pencil-two { right: -7%; bottom: 19%; transform: rotate(-11deg); }
 
-.lockout-copy {
+.lockout-copy-shell {
   position: relative;
   z-index: 2;
   animation: lockout-slam 0.68s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+.lockout-copy {
+  display: inline-block;
+  animation: lockout-copy-loop 4.8s ease-in-out 0.82s infinite;
   text-shadow: 0 10px 34px color-mix(in oklab, var(--background) 48%, transparent);
   font-variation-settings: "wght" 540;
 }
@@ -797,6 +824,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .lockout-scene,
+  .lockout-copy-shell,
   .lockout-copy,
   .lockout-cross {
     animation: none;

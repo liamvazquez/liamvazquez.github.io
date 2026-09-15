@@ -47,6 +47,8 @@ class DiaryAudio {
   private nextBeat = 0;
   private step = 0;
   private musicPlaying = false;
+  private denialAmbiencePlaying = false;
+  private denialNoiseSource: AudioBufferSourceNode | null = null;
   private musicVolume = 0.62;
   private musicMuted = false;
   private visibilityBound = false;
@@ -90,7 +92,7 @@ class DiaryAudio {
   private onVisibilityChange = () => {
     if (!this.context) return;
     if (document.hidden) void this.context.suspend();
-    else if (this.musicPlaying) void this.context.resume();
+    else if (this.musicPlaying || this.denialAmbiencePlaying) void this.context.resume();
   };
 
   private tone(
@@ -229,6 +231,45 @@ class DiaryAudio {
         this.noise(t + 1.78, 0.12, 0.04, 2900);
         break;
     }
+  }
+
+  startDenialAmbience() {
+    if (!this.init() || !this.context || !this.effects || this.denialAmbiencePlaying) return;
+    this.denialAmbiencePlaying = true;
+    const context = this.context;
+    const duration = 2.4;
+    const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * duration), context.sampleRate);
+    const channel = buffer.getChannelData(0);
+    let brown = 0;
+    for (let index = 0; index < channel.length; index += 1) {
+      const white = Math.random() * 2 - 1;
+      brown = (brown + 0.018 * white) / 1.018;
+      channel[index] = white * 0.34 + brown * 3.1;
+    }
+
+    const source = context.createBufferSource();
+    const lowpass = context.createBiquadFilter();
+    const highpass = context.createBiquadFilter();
+    const gain = context.createGain();
+    const lfo = context.createOscillator();
+    const lfoDepth = context.createGain();
+    source.buffer = buffer;
+    source.loop = true;
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = 2350;
+    lowpass.Q.value = 0.7;
+    highpass.type = "highpass";
+    highpass.frequency.value = 95;
+    gain.gain.setValueAtTime(0.0001, context.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.095, context.currentTime + 1.1);
+    lfo.type = "sine";
+    lfo.frequency.value = 0.17;
+    lfoDepth.gain.value = 0.024;
+    lfo.connect(lfoDepth).connect(gain.gain);
+    source.connect(highpass).connect(lowpass).connect(gain).connect(this.effects);
+    source.start();
+    lfo.start();
+    this.denialNoiseSource = source;
   }
 
   startJazz() {
