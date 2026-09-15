@@ -32,10 +32,8 @@ jobs:
 
       - name: Check build output
         run: |
-          echo "=== ROOT ==="
-          ls -la
-          echo "=== OUTPUT ==="
-          find . -maxdepth 3 -type d \( -name "dist" -o -name ".output" \) -print
+          echo "=== .output ==="
+          find .output -maxdepth 4 -type f | head -100
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -43,7 +41,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./.output
 
       - name: Deploy
         uses: actions/deploy-pages@v4
