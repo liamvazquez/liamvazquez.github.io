@@ -360,6 +360,11 @@
   to { transform: translate3d(-4%, 45%, 0); }
 }
 
+@keyframes rain-refraction {
+  0% { mask-position: 9% -30%, 29% -60%, 47% -15%, 67% -45%, 88% -75%; }
+  100% { mask-position: 9% 145%, 29% 160%, 47% 135%, 67% 155%, 88% 170%; }
+}
+
 @keyframes rain-note-write {
   0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: rotate(-1.5deg) translateY(5px); }
   100% { opacity: 1; clip-path: inset(0 0 0 0); transform: rotate(-1.5deg) translateY(0); }
@@ -641,10 +646,32 @@
 }
 
 .lockout-copy {
+  position: relative;
   display: inline-block;
   animation: lockout-copy-loop 4.8s ease-in-out 0.82s infinite;
   text-shadow: 0 10px 34px color-mix(in oklab, var(--background) 48%, transparent);
   font-variation-settings: "wght" 540;
+}
+
+.lockout-copy::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: 21;
+  color: var(--destructive-foreground);
+  transform: translate3d(7px, 2px, 0) scaleX(1.045) scaleY(1.035);
+  transform-origin: center;
+  filter: blur(1.15px) contrast(1.4);
+  opacity: 0.92;
+  mask-image:
+    radial-gradient(ellipse 18px 31px at center, black 35%, transparent 72%),
+    radial-gradient(ellipse 27px 42px at center, black 32%, transparent 71%),
+    radial-gradient(ellipse 23px 38px at center, black 34%, transparent 73%),
+    radial-gradient(ellipse 31px 48px at center, black 30%, transparent 70%),
+    radial-gradient(ellipse 20px 35px at center, black 33%, transparent 72%);
+  mask-repeat: no-repeat;
+  animation: rain-refraction 7.8s linear -4.2s infinite;
+  pointer-events: none;
 }
 
 .lockout-cross {
