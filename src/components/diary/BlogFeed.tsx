@@ -14,7 +14,7 @@ export function BlogFeed() {
   const [liked, setLiked] = useState<Set<string>>(() => new Set());
   const [favorites, setFavorites] = useState<Set<string>>(() => new Set());
   const [notice, setNotice] = useState<string | null>(null);
-  const noticeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const noticeTimer = useRef<number | null>(null);
 
   useEffect(() => {
     try {
