@@ -47,8 +47,9 @@ class DiaryAudio {
   private nextBeat = 0;
   private step = 0;
   private musicPlaying = false;
-  private denialAmbiencePlaying = false;
+  private denialRainPlaying = false;
   private denialNoiseSource: AudioBufferSourceNode | null = null;
+  private denialRainTimer: number | null = null;
   private musicVolume = 0.62;
   private musicMuted = false;
   private visibilityBound = false;
@@ -92,7 +93,7 @@ class DiaryAudio {
   private onVisibilityChange = () => {
     if (!this.context) return;
     if (document.hidden) void this.context.suspend();
-    else if (this.musicPlaying || this.denialAmbiencePlaying) void this.context.resume();
+    else if (this.musicPlaying || this.denialRainPlaying) void this.context.resume();
   };
 
   private tone(
@@ -233,9 +234,9 @@ class DiaryAudio {
     }
   }
 
-  startDenialAmbience() {
-    if (!this.init() || !this.context || !this.effects || this.denialAmbiencePlaying) return;
-    this.denialAmbiencePlaying = true;
+  startDenialRain() {
+    if (!this.init() || !this.context || !this.effects || this.denialRainPlaying) return;
+    this.denialRainPlaying = true;
     const context = this.context;
     const duration = 2.4;
     const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * duration), context.sampleRate);
@@ -244,7 +245,7 @@ class DiaryAudio {
     for (let index = 0; index < channel.length; index += 1) {
       const white = Math.random() * 2 - 1;
       brown = (brown + 0.018 * white) / 1.018;
-      channel[index] = white * 0.34 + brown * 3.1;
+      channel[index] = white * 0.62 + brown * 1.6;
     }
 
     const source = context.createBufferSource();
@@ -256,20 +257,30 @@ class DiaryAudio {
     source.buffer = buffer;
     source.loop = true;
     lowpass.type = "lowpass";
-    lowpass.frequency.value = 2350;
-    lowpass.Q.value = 0.7;
+    lowpass.frequency.value = 5200;
+    lowpass.Q.value = 0.45;
     highpass.type = "highpass";
-    highpass.frequency.value = 95;
+    highpass.frequency.value = 420;
     gain.gain.setValueAtTime(0.0001, context.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.095, context.currentTime + 1.1);
+    gain.gain.exponentialRampToValueAtTime(0.12, context.currentTime + 0.9);
     lfo.type = "sine";
-    lfo.frequency.value = 0.17;
-    lfoDepth.gain.value = 0.024;
+    lfo.frequency.value = 0.11;
+    lfoDepth.gain.value = 0.018;
     lfo.connect(lfoDepth).connect(gain.gain);
     source.connect(highpass).connect(lowpass).connect(gain).connect(this.effects);
     source.start();
     lfo.start();
     this.denialNoiseSource = source;
+    const scheduleDrops = () => {
+      if (!this.context || !this.denialRainPlaying) return;
+      const now = this.context.currentTime + 0.015;
+      for (let index = 0; index < 5; index += 1) {
+        const offset = Math.random() * 0.82;
+        this.noise(now + offset, 0.025 + Math.random() * 0.055, 0.018 + Math.random() * 0.026, 2800 + Math.random() * 3600);
+      }
+    };
+    scheduleDrops();
+    this.denialRainTimer = window.setInterval(scheduleDrops, 760);
   }
 
   startJazz() {

@@ -48,6 +48,11 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
         <div className="lockout-paper absolute inset-0" aria-hidden="true" />
         <div className="lockout-shadow absolute inset-0" aria-hidden="true" />
         <div className="lockout-window-shadow absolute inset-0" aria-hidden="true" />
+        <div className="lockout-rain absolute inset-0" aria-hidden="true">
+          <span className="lockout-rain-sheet lockout-rain-sheet-one" />
+          <span className="lockout-rain-sheet lockout-rain-sheet-two" />
+          <span className="lockout-rain-sheet lockout-rain-sheet-three" />
+        </div>
         <span className="lockout-margin" aria-hidden="true" />
         <span className="lockout-hole lockout-hole-one" aria-hidden="true" />
         <span className="lockout-hole lockout-hole-two" aria-hidden="true" />
@@ -80,6 +85,9 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
             Sincerely, Vaz.
           </p>
         </div>
+        <p className="lockout-rain-note absolute right-5 bottom-5 max-w-[15rem] text-right font-[family-name:var(--font-display)] text-sm text-destructive-foreground/80 italic md:right-10 md:bottom-8 md:max-w-sm md:text-lg">
+          PS : Enjoy the rain noise while you&apos;re fucked off 🤤
+        </p>
       </div>
     );
   }
@@ -159,7 +167,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
             tone="ghost"
             onClick={() => {
               diaryAudio.play("denial");
-               diaryAudio.startDenialAmbience();
+               diaryAudio.startDenialRain();
               setStage("rejected");
             }}
           >
