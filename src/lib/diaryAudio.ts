@@ -289,6 +289,13 @@ class DiaryAudio {
       this.music.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * 0.16, this.context.currentTime, 0.045);
     }
     if (!nextMuted) this.play("mute");
+    if (!nextMuted) {
+      try {
+        window.localStorage.setItem("liam-diary-jazz-volume", String(this.musicVolume));
+      } catch {
+        // Audio still works when storage is unavailable.
+      }
+    }
     return nextMuted;
   }
 }

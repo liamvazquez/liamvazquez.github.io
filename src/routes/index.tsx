@@ -92,7 +92,11 @@ function Index() {
               size="icon"
               aria-label={musicMuted ? "Turn jazz on" : "Mute jazz"}
               aria-pressed={musicMuted}
-              onClick={() => setMusicMuted(diaryAudio.toggleMusicMute())}
+              onClick={() => {
+                const nextMuted = diaryAudio.toggleMusicMute();
+                setMusicMuted(nextMuted);
+                setMusicVolume(diaryAudio.getMusicVolume());
+              }}
               className="h-7 w-7 rounded-none text-ash shadow-none hover:bg-accent hover:text-cream"
             >
               {musicMuted ? <VolumeX className="h-3.5 w-3.5" /> : musicVolume < 0.5 ? <Volume1 className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
