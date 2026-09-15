@@ -4,6 +4,7 @@ import { Minus, Plus, Crosshair, X } from "lucide-react";
 import { characters, connections, relationMeta, type Character } from "@/data/relationships";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { diaryAudio } from "@/lib/diaryAudio";
 
 const MIN_ZOOM = 0.4;
 const MAX_ZOOM = 3;
@@ -144,6 +145,7 @@ export function RelationshipGraph() {
                 key={ch.id}
                 onClick={(e) => {
                   e.stopPropagation();
+                  diaryAudio.play(selected?.id === ch.id ? "close" : "node");
                   setSelected((s) => (s?.id === ch.id ? null : ch));
                 }}
                 className={cn(
@@ -201,6 +203,7 @@ export function RelationshipGraph() {
                   size="icon"
                   onClick={(e) => {
                     e.stopPropagation();
+                    diaryAudio.play("close");
                     setSelected(null);
                   }}
                   className="h-7 w-7 rounded-full text-ash shadow-none transition-colors hover:bg-accent hover:text-cream"
@@ -229,12 +232,9 @@ export function RelationshipGraph() {
         <p className="text-[0.6rem] tracking-editorial text-ash uppercase">Legend</p>
         <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 md:grid-cols-3 md:gap-x-7">
           {Object.entries(relationMeta).map(([key, meta]) => (
-            <li key={key} className="flex min-w-0 items-start gap-2">
-              <span className="mt-1.5 h-[2px] w-5 shrink-0 rounded-full" style={{ backgroundColor: meta.color }} />
-              <span className="min-w-0">
-                <span className="block text-[0.65rem] leading-tight text-cream/85">{meta.label}</span>
-                <span className="mt-0.5 block text-[0.55rem] leading-tight text-ash">{meta.description}</span>
-              </span>
+            <li key={key} className="flex min-w-0 items-center gap-2">
+              <span className="h-[2px] w-5 shrink-0 rounded-full" style={{ backgroundColor: meta.color }} />
+              <span className="min-w-0 text-[0.65rem] leading-tight text-cream/85">{meta.label}</span>
             </li>
           ))}
         </ul>
@@ -243,9 +243,9 @@ export function RelationshipGraph() {
       {/* Controls */}
       <div className="absolute right-5 bottom-5 flex flex-col gap-2">
         {[
-          { icon: Plus, action: () => buttonZoom(1), label: "Zoom in" },
-          { icon: Minus, action: () => buttonZoom(-1), label: "Zoom out" },
-          { icon: Crosshair, action: centerView, label: "Recenter" },
+          { icon: Plus, action: () => { diaryAudio.play("zoom-in"); buttonZoom(1); }, label: "Zoom in" },
+          { icon: Minus, action: () => { diaryAudio.play("zoom-out"); buttonZoom(-1); }, label: "Zoom out" },
+          { icon: Crosshair, action: () => { diaryAudio.play("recenter"); centerView(); }, label: "Recenter" },
         ].map(({ icon: Icon, action, label }) => (
           <Button
             type="button"

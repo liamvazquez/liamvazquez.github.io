@@ -4,6 +4,7 @@ import liamAvatar from "@/assets/liam-avatar.png.asset.json";
 import { diaryPosts } from "@/data/posts";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { diaryAudio } from "@/lib/diaryAudio";
 
 const FAVORITES_KEY = "liam-diary-favorites";
 
@@ -30,6 +31,7 @@ export function BlogFeed() {
   }, []);
 
   const toggleLike = (id: string) => {
+    diaryAudio.play(liked.has(id) ? "unlike" : "like");
     setLiked((current) => {
       const next = new Set(current);
       if (next.has(id)) next.delete(id);
@@ -39,6 +41,7 @@ export function BlogFeed() {
   };
 
   const toggleFavorite = (id: string) => {
+    diaryAudio.play(favorites.has(id) ? "unfavorite" : "favorite");
     setFavorites((current) => {
       const next = new Set(current);
       if (next.has(id)) next.delete(id);
@@ -53,6 +56,7 @@ export function BlogFeed() {
   };
 
   const refuseComment = () => {
+    diaryAudio.play("comment");
     setNotice("No, you can't fucking comment on my own fucking diary.");
     if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
     noticeTimer.current = window.setTimeout(() => setNotice(null), 3200);
@@ -61,7 +65,10 @@ export function BlogFeed() {
   const visiblePosts = filter === "all" ? diaryPosts : diaryPosts.filter((post) => favorites.has(post.id));
 
   return (
-    <div className="relative mx-auto w-full max-w-[34rem] px-5 pb-32">
+    <div className="blog-atmosphere relative mx-auto w-full max-w-[34rem] px-5 pb-32">
+      <div className="blog-rain" aria-hidden="true">
+        <span>09 / 15 / 26</span><span>PRIVATE</span><span>MIDORI</span><span>LV—001</span>
+      </div>
       <header className="animate-soft-rise border-b border-border pt-4 pb-10">
         <h2 className="font-[family-name:var(--font-display)] text-5xl font-light text-cream italic">
           The Feed
@@ -77,7 +84,10 @@ export function BlogFeed() {
               variant="ghost"
               role="tab"
               aria-selected={filter === key}
-              onClick={() => setFilter(key)}
+              onClick={() => {
+                diaryAudio.play("filter");
+                setFilter(key);
+              }}
               className={cn(
                 "h-auto rounded-none border-b px-0 py-2 text-[0.68rem] font-normal uppercase tracking-[0.18em] shadow-none hover:bg-transparent",
                 filter === key

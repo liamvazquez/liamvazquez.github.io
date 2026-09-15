@@ -9,7 +9,10 @@ export type RelationType =
   | "rival"
   | "complicated"
   | "family"
-  | "acquaintance";
+  | "acquaintance"
+  | "trust"
+  | "distrust"
+  | "mentor";
 
 export const relationMeta: Record<RelationType, { label: string; description: string; color: string }> = {
   hate: { label: "Hatred", description: "Hostility", color: "var(--relation-hate)" },
@@ -21,6 +24,9 @@ export const relationMeta: Record<RelationType, { label: string; description: st
   complicated: { label: "Complicated", description: "Hard to define", color: "var(--relation-complicated)" },
   family: { label: "Family", description: "Blood and bonds", color: "var(--relation-family)" },
   acquaintance: { label: "Acquaintance / Distant", description: "Peripheral", color: "var(--relation-acquaintance)" },
+  trust: { label: "Trust", description: "Guard lowered", color: "var(--relation-trust)" },
+  distrust: { label: "Distrust", description: "Always watching", color: "var(--relation-distrust)" },
+  mentor: { label: "Mentor / Guidance", description: "A hand on the compass", color: "var(--relation-mentor)" },
 };
 
 export type Character = {
