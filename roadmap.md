@@ -10,4 +10,4 @@
 - [x] Refine the No button and denial-screen details
 - [x] Add subtle motion across the full diary
 - [x] Add persistent jazz volume controls
-- [ ] Verify the revised flow on desktop and mobile
+- [x] Verify the revised flow on desktop and mobile
