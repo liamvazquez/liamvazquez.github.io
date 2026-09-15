@@ -1,6 +1,7 @@
 import { useState } from "react";
 import liamAvatar from "@/assets/liam-avatar.png.asset.json";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type Stage = "first" | "second" | "leaving" | "glitch" | "rejected";
 
@@ -14,10 +15,12 @@ function GateButton({
   tone?: "cream" | "ghost";
 }) {
   return (
-    <button
+    <Button
+      type="button"
+      variant="ghost"
       onClick={onClick}
       className={cn(
-        "min-w-[9rem] px-10 py-3 text-xs uppercase tracking-editorial transition-all duration-500",
+        "h-auto min-w-[9rem] rounded-none px-10 py-3 text-xs font-normal uppercase tracking-editorial shadow-none transition-all duration-500 hover:bg-transparent",
         "border",
         tone === "cream"
           ? "border-cream/70 text-cream hover:bg-cream hover:text-ink"
@@ -25,7 +28,7 @@ function GateButton({
       )}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 
@@ -34,17 +37,24 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
 
   if (stage === "rejected") {
     return (
-      <div className="grain fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#4a0206] px-6 select-none">
-        <div className="animate-cross-draw relative h-40 w-40 md:h-56 md:w-56">
-          <span className="absolute top-1/2 left-0 h-[10px] w-full -translate-y-1/2 rotate-45 bg-white" />
-          <span className="absolute top-1/2 left-0 h-[10px] w-full -translate-y-1/2 -rotate-45 bg-white" />
+      <div className="lockout-scene grain fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-destructive px-6 select-none">
+        <div className="lockout-scanlines absolute inset-0" />
+        <div className="lockout-fracture absolute inset-0" aria-hidden="true" />
+        <span className="absolute top-7 left-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Access revoked // 00:00:00</span>
+        <span className="absolute right-7 bottom-7 font-mono text-[0.58rem] tracking-editorial text-destructive-foreground/55 uppercase">Do not return</span>
+        <div className="animate-cross-draw lockout-cross relative h-40 w-40 md:h-56 md:w-56">
+          <span className="absolute top-1/2 left-0 h-[10px] w-full -translate-y-1/2 rotate-45 bg-destructive-foreground shadow-[0_0_30px_var(--destructive-foreground)]" />
+          <span className="absolute top-1/2 left-0 h-[10px] w-full -translate-y-1/2 -rotate-45 bg-destructive-foreground shadow-[0_0_30px_var(--destructive-foreground)]" />
         </div>
         <p
-          className="animate-soft-rise mt-14 text-center font-[family-name:var(--font-display)] text-4xl text-white md:text-6xl"
+          className="lockout-copy animate-soft-rise mt-14 text-center font-[family-name:var(--font-display)] text-4xl text-destructive-foreground md:text-6xl"
+          data-text="Then fuck off then."
           style={{ animationDelay: "0.35s" }}
         >
           Then fuck off then.
         </p>
+        <div className="absolute top-[18%] left-0 h-px w-[42%] rotate-6 bg-destructive-foreground/30" />
+        <div className="absolute right-0 bottom-[23%] h-px w-[48%] -rotate-12 bg-destructive-foreground/30" />
       </div>
     );
   }
@@ -52,7 +62,7 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
   return (
     <div
       className={cn(
-        "grain fixed inset-0 z-40 overflow-hidden bg-black",
+        "entrance-scene grain fixed inset-0 z-40 overflow-hidden bg-background",
         stage === "glitch" && "animate-glitch-out",
         stage === "leaving" && "animate-veil-out",
       )}
@@ -60,9 +70,25 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
       <img
         src={liamAvatar.url}
         alt="Liam Vazquez standing in his school uniform"
-        className="absolute inset-0 h-full w-full scale-105 object-contain opacity-45 brightness-[0.6] contrast-[1.1] saturate-[0.7]"
+        className="absolute inset-y-0 right-[-12%] h-full w-[82%] scale-105 object-contain object-right opacity-50 brightness-[0.62] contrast-[1.12] saturate-[0.72] md:right-[2%] md:w-[62%]"
       />
       <div className="vignette absolute inset-0" />
+
+      <div className="pointer-events-none absolute inset-0 text-ash/50" aria-hidden="true">
+        <div className="absolute top-8 left-7 border border-current px-4 py-3 text-[0.55rem] tracking-editorial uppercase md:top-12 md:left-12">
+          <span className="block text-cream/75">Midori High</span>
+          <span className="mt-1 block">Private archive · 09/15/26</span>
+        </div>
+        <div className="absolute top-8 right-7 text-right font-[family-name:var(--font-display)] text-xl text-cream/35 md:top-12 md:right-12 md:text-3xl">
+          緑高校<br /><span className="text-[0.55rem] font-sans tracking-editorial uppercase">Personal record</span>
+        </div>
+        <div className="absolute bottom-9 left-7 font-mono text-[0.55rem] leading-loose tracking-[0.16em] uppercase md:bottom-12 md:left-12">
+          35.6762° N<br />139.6503° E<br />File LV-0915
+        </div>
+        <div className="absolute bottom-10 left-1/2 h-12 w-px bg-cream/20 before:absolute before:top-1/2 before:left-1/2 before:h-px before:w-12 before:-translate-x-1/2 before:bg-cream/20" />
+        <span className="entrance-tape absolute top-[20%] left-[5%] h-6 w-24 -rotate-6 bg-cream/10 md:left-[26%]" />
+        <span className="absolute top-1/2 left-5 text-[4rem] font-thin text-cream/10 md:left-16">＋</span>
+      </div>
 
       <div className="relative flex h-full flex-col items-center justify-center px-6 text-center">
         <p className="animate-soft-rise text-[0.6rem] tracking-editorial text-ash uppercase">
