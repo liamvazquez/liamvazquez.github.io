@@ -108,6 +108,36 @@ export function BlogFeed() {
         <i className="blog-light blog-light-one" /><i className="blog-light blog-light-two" />
         <i className="blog-paper blog-paper-one" /><i className="blog-paper blog-paper-two" />
       </div>
+
+      <div className="feed-margin feed-margin-left" aria-hidden="true">
+        <span className="feed-rule" />
+        <span className="feed-ticker">
+          <em>notes to nobody</em>
+          <em>midori high</em>
+          <em>don&apos;t read this</em>
+          <em>notes to nobody</em>
+          <em>midori high</em>
+          <em>don&apos;t read this</em>
+        </span>
+        <span className="feed-doodle feed-doodle-one" />
+        <span className="feed-doodle feed-doodle-two" />
+        <span className="feed-clip" />
+      </div>
+
+      <div className="feed-margin feed-margin-right" aria-hidden="true">
+        <span className="feed-rule" />
+        <span className="feed-ticker feed-ticker-reverse">
+          <em>still writing</em>
+          <em>still angry</em>
+          <em>still here</em>
+          <em>still writing</em>
+          <em>still angry</em>
+          <em>still here</em>
+        </span>
+        <span className="feed-doodle feed-doodle-three" />
+        <span className="feed-scribble" />
+        <span className="feed-clip feed-clip-low" />
+      </div>
       <header className="animate-soft-rise border-b border-border pt-4 pb-10">
         <h2 className="font-[family-name:var(--font-display)] text-5xl font-light text-cream italic">
           The Feed
