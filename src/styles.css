@@ -872,8 +872,8 @@
   width: 116%;
   height: 116%;
   object-fit: cover;
-  opacity: 0.16;
-  filter: grayscale(0.55) sepia(0.18) brightness(0.42) contrast(0.9);
+  opacity: 0.3;
+  filter: grayscale(0.55) sepia(0.18) brightness(0.55) contrast(0.95);
   mask-image: radial-gradient(ellipse 72% 64% at 50% 42%, black 26%, transparent 78%);
   -webkit-mask-image: radial-gradient(ellipse 72% 64% at 50% 42%, black 26%, transparent 78%);
   animation: waterfall-breathe 16s ease-in-out infinite;
@@ -887,7 +887,7 @@
   background: repeating-linear-gradient(
     to bottom,
     transparent 0 14px,
-    color-mix(in oklab, var(--cream) 11%, transparent) 16px 22px,
+    color-mix(in oklab, var(--cream) 16%, transparent) 16px 22px,
     transparent 24px 44px
   );
   filter: blur(1.6px);
@@ -911,7 +911,7 @@
   bottom: 8%;
   width: 44%;
   height: 26%;
-  background: radial-gradient(ellipse at 50% 60%, color-mix(in oklab, var(--cream) 10%, transparent), transparent 68%);
+  background: radial-gradient(ellipse at 50% 60%, color-mix(in oklab, var(--cream) 14%, transparent), transparent 68%);
   filter: blur(20px);
   animation: waterfall-mist-drift 11s ease-in-out infinite;
 }
