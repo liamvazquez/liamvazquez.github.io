@@ -902,6 +902,10 @@
   animation: backstory-frame-slip 3.8s steps(1, end) infinite;
 }
 
+.backstory-scene > div {
+  pointer-events: none;
+}
+
 .backstory-blackout {
   position: absolute;
   inset: 0;
