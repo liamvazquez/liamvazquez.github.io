@@ -15,7 +15,7 @@ import waterfallImage from "@/assets/waterfall.png";
 
 const TITLE = "Vazquez's Diary";
 const DESCRIPTION =
-  `╰ˋˋ→ 🏵️┃"Who even fucking cares anyways..? Don't you have nothing better to do...? I guess you could check it out then,"`;
+  "╰ˋˋ→ 🏵️┃\"Who even fucking cares anyways..? Don't you have nothing better to do...? I guess you could check it out then,\"";
 
 export const Route = createFileRoute("/")({
   head: () => ({
