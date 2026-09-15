@@ -221,7 +221,7 @@ export function BlogFeed() {
             </div>
 
             <p className="mt-3 text-xs tracking-[0.18em] text-cream uppercase">
-              {(post.likes + (liked.has(post.id) ? 1 : 0)).toLocaleString()} likes
+              {(likeTotals[post.id] ?? post.likes).toLocaleString()} likes
             </p>
 
             <p className="mt-4 text-sm leading-[1.9] whitespace-pre-line text-cream/85">
