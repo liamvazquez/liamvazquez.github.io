@@ -16,5 +16,5 @@
 - [x] Soften and deepen the denial sound
 - [x] Add relationship photo enlargement
 - [x] Verify revised visuals and interactions on desktop and mobile
-- [ ] Add denial screenshake and delayed hand-drawn signature conclusion
-- [ ] Verify the signature sequence on desktop and mobile
+- [x] Add denial screenshake and delayed hand-drawn signature conclusion
+- [x] Verify the signature sequence on desktop and mobile
