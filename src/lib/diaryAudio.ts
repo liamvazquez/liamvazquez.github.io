@@ -233,7 +233,7 @@ class DiaryAudio {
     const bass = [NOTES.a2, NOTES.c3, NOTES.e3, NOTES.g2, NOTES.d2, NOTES.e2, NOTES.g2, NOTES.b2];
     if (step % 2 === 0) {
       const bassNote = bass[(step / 2) % bass.length];
-      this.tone(bassNote, time, eighth * 1.7, 0.12, "triangle", this.music);
+      if (bassNote) this.tone(bassNote, time, eighth * 1.7, 0.12, "triangle", this.music);
     }
     if (step % 8 === 0) {
       const chords = step % 16 === 0

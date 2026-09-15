@@ -1,8 +1,8 @@
 # Roadmap
 
-- [ ] Add shared synthesized sounds and groovy jazz ambience
-- [ ] Upgrade final entrance and denial-line animation
-- [ ] Add sounds to every diary control and a music toggle
-- [ ] Add visitor-count explanation and moving blog backdrop
-- [ ] Simplify and expand relationship legend
+- [x] Add shared synthesized sounds and groovy jazz ambience
+- [x] Upgrade final entrance and denial-line animation
+- [x] Add sounds to every diary control and a music toggle
+- [x] Add visitor-count explanation and moving blog backdrop
+- [x] Simplify and expand relationship legend
 - [ ] Verify desktop and mobile interactions
