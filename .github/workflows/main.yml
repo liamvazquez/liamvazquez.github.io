@@ -30,18 +30,13 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Check build output
-        run: |
-          echo "=== .output ==="
-          find .output -maxdepth 4 -type f | head -100
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./.output
+          path: ./.output/public
 
       - name: Deploy
         uses: actions/deploy-pages@v4
