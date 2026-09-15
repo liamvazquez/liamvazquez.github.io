@@ -28,3 +28,5 @@
 - [x] Refine denial rain into soft windshield droplets with text distortion
 - [x] Mellow the rain audio and restyle the PS as faint handwriting
 - [x] Strengthen droplet glass blur while retaining faint high-detail rainfall
+- [x] Add stronger independent screen impact and lens-like foreground water distortion
+- [x] Add moving optical refraction directly through the denial headline
