@@ -23,3 +23,5 @@
 - [x] Verify the refined lockout scene on desktop and mobile
 - [x] Add unsettling white-noise ambience to the denial scene
 - [x] Loop subtle analog motion through “Then fuck off then!”
+- [x] Replace denial white noise with continuous rain and visible rainfall
+- [x] Add Liam’s handwritten rain PS to the bottom-right
