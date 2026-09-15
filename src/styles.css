@@ -1434,8 +1434,12 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: color-mix(in oklab, var(--cream) 70%, transparent);
-  writing-mode: vertical-rl;
   animation: feed-ticker-scroll 46s linear infinite;
+}
+.feed-ticker em {
+  writing-mode: vertical-rl;
+  font-style: italic;
+  white-space: nowrap;
 }
 .feed-margin-left .feed-ticker { right: 1rem; }
 .feed-margin-right .feed-ticker { left: 1rem; rotate: 180deg; }
