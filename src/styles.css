@@ -889,6 +889,10 @@
   background: oklch(0.045 0.008 25);
 }
 
+.backstory-active > header {
+  z-index: 30;
+}
+
 .backstory-active .diary-ambient {
   opacity: 0.08;
   filter: grayscale(1) contrast(2.4);
