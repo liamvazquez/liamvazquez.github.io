@@ -13,9 +13,9 @@ import { Slider } from "@/components/ui/slider";
 import { incrementDiaryVisit } from "@/lib/visits.functions";
 import waterfallImage from "@/assets/waterfall.png";
 
-const TITLE = "Liam Vazquez — Private Diary";
+const TITLE = "Vazquez's Diary";
 const DESCRIPTION =
-  "The private diary of Liam Vazquez: entries, photographs and the people tangled up in his life.";
+  `╰ˋˋ→ 🏵️┃"Who even fucking cares anyways..? Don't you have nothing better to do...? I guess you could check it out then,"`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
