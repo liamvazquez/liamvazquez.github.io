@@ -270,6 +270,7 @@ export function BlogFeed() {
                 ? "No comments"
                 : `${post.comments} comment${post.comments === 1 ? "" : "s"}`}
             </p>
+            </div>
           </article>
         ))}
       </div>
