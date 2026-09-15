@@ -5,4 +5,4 @@
 - [x] Add sounds to every diary control and a music toggle
 - [x] Add visitor-count explanation and moving blog backdrop
 - [x] Simplify and expand relationship legend
-- [ ] Verify desktop and mobile interactions
+- [x] Verify desktop and mobile interactions
