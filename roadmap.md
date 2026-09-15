@@ -36,3 +36,6 @@
 - [x] Add a twitching Backstory tab and text-only analog-horror state
 - [x] Crossfade jazz into synthesized horror ambience and restore it on exit
 - [x] Verify Backstory transitions on desktop and mobile
+- [x] Intensify Backstory text corruption and environmental details
+- [x] Add full-screen transitions entering and leaving Backstory
+- [x] Replace the per-browser visitor count with one shared global total
