@@ -37,7 +37,12 @@ export function Entrance({ onEnter }: { onEnter: () => void }) {
   const [stage, setStage] = useState<Stage>("first");
 
   useEffect(() => {
+    diaryAudio.startEntranceAmbience();
+  }, []);
+
+  useEffect(() => {
     if (stage !== "rejected") return;
+    diaryAudio.stopEntranceAmbience();
     const penTimer = window.setTimeout(() => diaryAudio.play("pen"), 1420);
     return () => window.clearTimeout(penTimer);
   }, [stage]);

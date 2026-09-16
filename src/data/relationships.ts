@@ -1,4 +1,5 @@
 import liamAvatar from "@/assets/liam-avatar.png";
+import titoAvatar from "@/assets/tito-fonseca.png";
 
 export type RelationType =
   | "hate"
@@ -41,11 +42,19 @@ export type Character = {
   note: string;
 };
 
+export type RelationWeight = {
+  type: RelationType;
+  /** Percentage share of the bond, 0–100. */
+  share: number;
+};
+
 export type Connection = {
   from: string;
   to: string;
   type: RelationType;
   label?: string;
+  /** Optional mix — hovering the line reveals the breakdown. */
+  weights?: RelationWeight[];
 };
 
 /** Add new characters here — x/y are offsets from Liam at (0,0). */
@@ -59,7 +68,26 @@ export const characters: Character[] = [
     y: 0,
     note: "That's me, what the actual fuck do you want me to tell you? It's just myself.",
   },
+  {
+    id: "tito",
+    name: "Tito Fonseca",
+    role: "Acquaintance",
+    image: titoAvatar,
+    x: 300,
+    y: -140,
+    note: "He's the first person I met. I don't like how he calls me Blondie, but he offered me a chance at the basketball club, and I appreciate that. Let's see how the future evolves with him.",
+  },
 ];
 
 /** Add new connections here. */
-export const connections: Connection[] = [];
+export const connections: Connection[] = [
+  {
+    from: "liam",
+    to: "tito",
+    type: "acquaintance",
+    weights: [
+      { type: "acquaintance", share: 80 },
+      { type: "friend", share: 20 },
+    ],
+  },
+];

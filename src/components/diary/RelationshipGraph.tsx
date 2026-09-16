@@ -16,6 +16,7 @@ export function RelationshipGraph() {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [selected, setSelected] = useState<Character | null>(null);
   const [expandedImage, setExpandedImage] = useState<Character | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
 
   const stateRef = useRef({ zoom, offset });
@@ -111,7 +112,7 @@ export function RelationshipGraph() {
           style={{ transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})` }}
         >
           <svg
-            className="pointer-events-none absolute overflow-visible"
+            className="absolute overflow-visible"
             width={1}
             height={1}
             style={{ left: 0, top: 0 }}
@@ -120,17 +121,70 @@ export function RelationshipGraph() {
               const a = characters.find((ch) => ch.id === c.from);
               const b = characters.find((ch) => ch.id === c.to);
               if (!a || !b) return null;
+              const key = `${c.from}-${c.to}-${i}`;
+              const mix = c.weights?.length
+                ? c.weights
+                : [{ type: c.type, share: 100 }];
+              const total = mix.reduce((sum, w) => sum + w.share, 0) || 100;
+              const active = hovered === key;
+              let cursor = 0;
               return (
-                <g key={`${c.from}-${c.to}-${i}`}>
+                <g key={key}>
+                  {mix.map((w, index) => {
+                    const start = cursor / total;
+                    cursor += w.share;
+                    const end = cursor / total;
+                    return (
+                      <line
+                        key={`${w.type}-${index}`}
+                        x1={a.x + (b.x - a.x) * start}
+                        y1={a.y + (b.y - a.y) * start}
+                        x2={a.x + (b.x - a.x) * end}
+                        y2={a.y + (b.y - a.y) * end}
+                        stroke={relationMeta[w.type].color}
+                        strokeWidth={active ? 3 : 1.6}
+                        opacity={active ? 1 : 0.75}
+                        className="pointer-events-none transition-all duration-200"
+                      />
+                    );
+                  })}
                   <line
                     x1={a.x}
                     y1={a.y}
                     x2={b.x}
                     y2={b.y}
-                    stroke={relationMeta[c.type].color}
-                    strokeWidth={1.6}
-                    opacity={0.75}
+                    stroke="transparent"
+                    strokeWidth={22}
+                    onPointerEnter={() => setHovered(key)}
+                    onPointerLeave={() => setHovered((h) => (h === key ? null : h))}
+                    style={{ cursor: "help" }}
                   />
+                  {active ? (
+                    <foreignObject
+                      x={(a.x + b.x) / 2 - 90}
+                      y={(a.y + b.y) / 2 - 76}
+                      width={180}
+                      height={130}
+                      className="pointer-events-none overflow-visible"
+                    >
+                      <div className="animate-soft-rise border border-border bg-background/92 px-3 py-2.5 backdrop-blur-sm">
+                        <p className="text-[0.55rem] tracking-editorial text-ash uppercase">Mix</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {mix.map((w, index) => (
+                            <li key={`${w.type}-label-${index}`} className="flex items-center gap-2">
+                              <span
+                                className="h-[2px] w-4 shrink-0 rounded-full"
+                                style={{ backgroundColor: relationMeta[w.type].color }}
+                              />
+                              <span className="text-[0.65rem] leading-tight text-cream/90">
+                                {Math.round((w.share / total) * 100)}% {relationMeta[w.type].label}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </foreignObject>
+                  ) : null}
                 </g>
               );
             })}

@@ -1,4 +1,4 @@
-const MUSIC_GAIN = 0.48;
+const MUSIC_GAIN = 0.74;
 const HORROR_GAIN = 0.3;
 
 export type DiarySound =
@@ -54,6 +54,9 @@ class DiaryAudio {
   private denialRainPlaying = false;
   private denialNoiseSource: AudioBufferSourceNode | null = null;
   private denialRainTimer: number | null = null;
+  private ambiencePlaying = false;
+  private ambienceSource: AudioBufferSourceNode | null = null;
+  private ambienceGain: GainNode | null = null;
   private musicVolume = 0.62;
   private musicMuted = false;
   private horrorPlaying = false;
@@ -293,8 +296,86 @@ class DiaryAudio {
     this.denialRainTimer = window.setInterval(scheduleDrops, 1200);
   }
 
+  private ambienceLevel() {
+    return this.musicMuted ? 0 : this.musicVolume * 0.16;
+  }
+
+  /** Soft brown-noise bed for the entrance screen. */
+  startEntranceAmbience() {
+    if (!this.init() || !this.context || !this.master || this.ambiencePlaying) return;
+    this.ambiencePlaying = true;
+    const context = this.context;
+    const duration = 3;
+    const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * duration), context.sampleRate);
+    const channel = buffer.getChannelData(0);
+    let brown = 0;
+    for (let index = 0; index < channel.length; index += 1) {
+      const white = Math.random() * 2 - 1;
+      brown = (brown + 0.021 * white) / 1.021;
+      channel[index] = brown * 3.2;
+    }
+
+    const source = context.createBufferSource();
+    const lowpass = context.createBiquadFilter();
+    const highpass = context.createBiquadFilter();
+    const gain = context.createGain();
+    const sway = context.createOscillator();
+    const swayDepth = context.createGain();
+    source.buffer = buffer;
+    source.loop = true;
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = 640;
+    lowpass.Q.value = 0.3;
+    highpass.type = "highpass";
+    highpass.frequency.value = 45;
+    gain.gain.setValueAtTime(0.0001, context.currentTime);
+    gain.gain.linearRampToValueAtTime(this.ambienceLevel(), context.currentTime + 2.4);
+    sway.type = "sine";
+    sway.frequency.value = 0.06;
+    swayDepth.gain.value = 0.012;
+    sway.connect(swayDepth).connect(gain.gain);
+    source.connect(highpass).connect(lowpass).connect(gain).connect(this.master);
+    source.start();
+    sway.start();
+    this.ambienceSource = source;
+    this.ambienceGain = gain;
+
+    if (context.state !== "running") {
+      const resume = () => {
+        void context.resume();
+        window.removeEventListener("pointerdown", resume);
+        window.removeEventListener("keydown", resume);
+      };
+      window.addEventListener("pointerdown", resume);
+      window.addEventListener("keydown", resume);
+    }
+  }
+
+  stopEntranceAmbience() {
+    if (!this.ambiencePlaying || !this.context) return;
+    this.ambiencePlaying = false;
+    const source = this.ambienceSource;
+    const gain = this.ambienceGain;
+    this.ambienceSource = null;
+    this.ambienceGain = null;
+    if (gain) {
+      const now = this.context.currentTime;
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(gain.gain.value, now);
+      gain.gain.linearRampToValueAtTime(0.0001, now + 1.4);
+    }
+    window.setTimeout(() => {
+      try {
+        source?.stop();
+      } catch {
+        // Already stopped.
+      }
+    }, 1600);
+  }
+
   startJazz() {
     if (!this.init() || !this.context || this.musicPlaying) return;
+    this.stopEntranceAmbience();
     this.musicPlaying = true;
     this.nextBeat = this.context.currentTime + 0.08;
     this.step = 0;
@@ -413,6 +494,7 @@ class DiaryAudio {
     if (this.music && this.context) {
       this.music.gain.setTargetAtTime(this.horrorMode ? 0 : next * MUSIC_GAIN, this.context.currentTime, 0.045);
       if (this.horror) this.horror.gain.setTargetAtTime(this.horrorMode ? next * HORROR_GAIN : 0, this.context.currentTime, 0.045);
+      if (this.ambienceGain) this.ambienceGain.gain.setTargetAtTime(this.ambienceLevel(), this.context.currentTime, 0.08);
     }
     try {
       window.localStorage.setItem("liam-diary-jazz-volume", String(next));
@@ -432,6 +514,7 @@ class DiaryAudio {
         this.music.gain.setTargetAtTime(0, this.context.currentTime, 0.045);
         this.horror.gain.setTargetAtTime(nextMuted ? 0 : this.musicVolume * HORROR_GAIN, this.context.currentTime, 0.045);
       }
+      if (this.ambienceGain) this.ambienceGain.gain.setTargetAtTime(this.ambienceLevel(), this.context.currentTime, 0.08);
     }
     if (!nextMuted) this.play("mute");
     if (!nextMuted) {
